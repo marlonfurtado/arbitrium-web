@@ -1,3 +1,4 @@
+
 # Arbitrium
 
 > Uma aplicação para ajudar a entender como as pessoas tomam decisões e fazem a gestão do tempo em seu cotidiano.
