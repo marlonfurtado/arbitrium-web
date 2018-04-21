@@ -9,7 +9,7 @@
   <li>VueJS:<a target="_blank" href="https://br.vuejs.org/v2/guide/"> guia completo </a></li>
   <li>Frontend:<a target="_blank" href="http://www.tools.ages.pucrs.br/arbitrium/api/wikis/frontend"> saiba mais sobre nossa aplicação web </a></li>
   <li>Estrutura do projeto web:<a target="_blank" href="http://vuejs-templates.github.io/webpack/"> vue-cli webpack </a> </li>
-  <!--Abaixo fica o caminho para conectar essa tela de inicio com a tela inicial -->
+  <!--below is located how to link pages in vue.js -->
   <li>Tela inicial do Projeto:<router-link to="/tela">Tela Inicial</router-link></li>
 </ul> 
 </div>

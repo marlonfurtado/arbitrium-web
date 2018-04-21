@@ -1,6 +1,6 @@
 <template>
-<!-- Como é separado os componentes de dentro do código .vue-->
-<!-- Primeiramente, colocamos o código em HTML-->
+<!-- How it is separate the construction o Vue.js-->
+<!-- First, the HTML code -->
 <div>
 	<div style="text-align: center;padding-top: 110px;">
 		<a style="font-size: 120px;color: #666666;">Arbitrium</a>
@@ -19,8 +19,8 @@
 </div>
 </template>
 
-<!-- Segundo vem os scripts em Javascript -->
-<!-- Dentro das tags scripts ficam os Códigos Javascript -->
+<!-- Second the javascript construction -->
+<!-- js comes inside script tag -->
   <script>
   export default {
     name: 'InicialScreen',
@@ -32,10 +32,10 @@
   }
   </script>
 
-  <!-- Terceiro vem os Códigos CSS -->
-  <!-- Código CSS dos botões da Página -->
+  <!-- Third the CSS code  -->
+  <!-- CSS buttons-->
   <style>
-  /*.button é o estilo do botão , sendo no .button o principal do botão*/
+
 .button {
   display: inline-block;
   border-radius: 10px;
@@ -51,7 +51,7 @@
   margin: 5px;
 }
 
-/**/
+
 .button span {
   cursor: pointer;
   display: inline-block;
