@@ -1,8 +1,7 @@
 <template>
 <!DOCTYPE html>
 <html>
-<div class="project-name m-t-20">
-    {{projectName}}
+<div>
 <head>
 	<title>Arbitrium</title>
 	<link href="https://fonts.googleapis.com/css?family=Arimo" rel="stylesheet">
@@ -21,7 +20,7 @@
 	</div>
 	<div align="center" style="margin-top: 100px;">
 		<button class="button" style="vertical-align:middle;margin-right: 100px;"><span>Resultados </span></button>
-		<button class="button" style="vertical-align:middle;margin-left: 100px;"><span>Iniciar </span></button>
+		<router-link to="/schedule"><button class="button" style="vertical-align:middle;margin-left: 100px;"><span>Iniciar </span></button></router-link>
 	</div>
 </body>
 </div>

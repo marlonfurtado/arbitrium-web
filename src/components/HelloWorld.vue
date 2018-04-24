@@ -12,6 +12,9 @@
   <!--below is located how to link pages in vue.js -->
   <li>Tela inicial do Projeto:<router-link to="/tela">Tela Inicial</router-link></li>
 </ul> 
+<div>
+  
+</div>
 </div>
 </template>
 
