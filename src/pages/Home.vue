@@ -1,44 +1,38 @@
 <template>
-<!DOCTYPE html>
-<html>
-<div>
-<head>
-	<title>Arbitrium</title>
-	<link href="https://fonts.googleapis.com/css?family=Arimo" rel="stylesheet">
-</head>
-<body>
-
-	<div style="text-align: center;padding-top: 110px;">
-		<a style="font-size: 120px;color: #666666;">Arbitrium</a>
-		<p style="font-size: 40px;color: #666666;">Seja Bem-vindo!!</p>
-	</div>
-	
+<div class="home">
+	<!-- <link href="https://fonts.googleapis.com/css?family=Arimo" rel="stylesheet"> -->
 	<div style="text-align: center;">
-		<p><a style="font-size: 30px;color: #666666;">Arbitrium é uma tarefa criada por pesquisadores para ajudar a entender</a></p>
-		<p><a style="font-size: 30px;color: #666666;">como as pessoas tomam decisões e fazem a gestão do tempo em seu</a></p>
-		<p><a style="font-size: 30px;color: #666666;">cotidiano.</a></p>
+		<a style="font-size: 110px;color: #666666;">Arbitrium</a>
+		<p style="font-size: 36px;color: #666666;">Seja Bem-vindo!!</p>
 	</div>
-	<div align="center" style="margin-top: 100px;">
+	<div style="text-align: center;">
+		<p><a style="font-size: 24px;color: #666666;">Arbitrium é uma tarefa criada por pesquisadores para ajudar a entender</a></p>
+		<p><a style="font-size: 24px;color: #666666;">como as pessoas tomam decisões e fazem a gestão do tempo em seu</a></p>
+		<p><a style="font-size: 24px;color: #666666;">cotidiano.</a></p>
+	</div>
+	<div align="center" style="margin-top: 60px;">
 		<button class="button" style="vertical-align:middle;margin-right: 100px;"><span>Resultados </span></button>
 		<router-link to="/schedule"><button class="button" style="vertical-align:middle;margin-left: 100px;"><span>Iniciar </span></button></router-link>
 	</div>
-</body>
 </div>
-</html>
 </template>
 
 <script>
 export default {
-  name: 'InicialScreen',
+  name: 'Home',
   data () {
-    return {
-      projectName: 'InitialScreen'
-    }
+    return { }
   }
 }
 </script>
 
-	<style>
+<style scoped>
+@import url('https://fonts.googleapis.com/css?family=Arimo');
+
+.home {
+  font-family: Arimo !important;
+}
+
 .button {
   display: inline-block;
   border-radius: 10px;
