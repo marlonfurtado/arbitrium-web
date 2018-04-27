@@ -51,7 +51,10 @@ export default {
       })
       .catch(err => {
         console.error('DaySchedule, getActivies() ', err)
-        this.activities = [{id: 1, description: "Dormir"}, {id: 2, description: "Comer"}, {id: 3, description: "Deslocamento de trabalho"}, {id: 4, description: "Trabalho"}]
+        this.activities = [{ id: 1, description: "Dormir" },
+                           { id: 2, description: "Comer" },
+                           { id: 3, description: "Deslocamento de trabalho" }, 
+                           { id: 4, description: "Trabalho" }]
       })
     },
     addActivity: function () {
@@ -66,6 +69,6 @@ export default {
 
 <style scoped>
 .pr-6 {
-  padding-right: 6rem!important;
+  padding-right: 6rem;
 }
 </style>

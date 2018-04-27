@@ -1,6 +1,5 @@
 <template>
 <div class="home">
-	<!-- <link href="https://fonts.googleapis.com/css?family=Arimo" rel="stylesheet"> -->
 	<div style="text-align: center;">
 		<a style="font-size: 110px;color: #666666;">Arbitrium</a>
 		<p style="font-size: 36px;color: #666666;">Seja Bem-vindo!!</p>
@@ -12,7 +11,7 @@
 	</div>
 	<div align="center" style="margin-top: 60px;">
 		<button class="button" style="vertical-align:middle;margin-right: 100px;"><span>Resultados </span></button>
-		<router-link to="/schedule"><button class="button" style="vertical-align:middle;margin-left: 100px;"><span>Iniciar </span></button></router-link>
+		<router-link to="/agenda"><button class="button" style="vertical-align:middle;margin-left: 100px;"><span>Iniciar </span></button></router-link>
 	</div>
 </div>
 </template>
@@ -30,7 +29,7 @@ export default {
 @import url('https://fonts.googleapis.com/css?family=Arimo');
 
 .home {
-  font-family: Arimo !important;
+  font-family: 'Arimo';
 }
 
 .button {
