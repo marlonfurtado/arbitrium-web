@@ -1,5 +1,6 @@
 <template>
 <div>
+  <img src="../assets/logo.png">
   <div class="project-name m-t-20">
     {{projectName}}
   </div>
