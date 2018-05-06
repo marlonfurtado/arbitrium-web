@@ -2,8 +2,11 @@
   <div class="container">
     <!-- TITLE -->
     <div class="row">
-      <div class="col-md-11">
-        <h2>Semana</h2>
+      <div class="col-md-1">
+        <h4>ID {{interviewId}}</h4>
+      </div>
+      <div class="col-md-10">
+        <h2>Semana </h2>
         <h5>Insira suas atividades diárias</h5>
       </div>
       <div class="col-md-1">
@@ -13,21 +16,28 @@
 
     <!-- SCHEDULE -->
     <div class="row align-items-center mt-5 mb-1">
-      <carousel class="col pt-2 pb-2" :per-page="1" :mouse-drag="true" :navigation-enabled="true">
+      <carousel @pageChange="pageChange" class="col pt-2 pb-2" :per-page="1" :mouse-drag="true" :navigation-enabled="true">
 
         <slide :key="day" v-for="day in days">
-          <DaySchedule :day="day"></DaySchedule>
+          <DaySchedule @dayActivities="createRelationship($event)" :day="day"></DaySchedule>
         </slide>
 
       </carousel>
     </div>
 
+    <div v-if="isSunday" class="col-md-2 ml-27">
+      <div class="input-group input-group-lg">
+        <button type="button" @click="createWeek" class="btn btn-primary btn-week">Iniciar simulação</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 // Vue carousel for each day in the schedule
 import { Carousel, Slide } from 'vue-carousel'
+import { getAll as getActivities } from '../services/activity'
+import { create as createWeek } from '../services/week'
 import DaySchedule from '../components/DaySchedule'
 
 export default {
@@ -39,18 +49,66 @@ export default {
   },
   data: () => {
     return {
+      isSunday: false,
       days: ['Segunda-Feira','Terça-Feira','Quarta-Feira','Quinta-Feira','Sexta-Feira','Sábado','Domingo'],
+      interviewId: null,
       relationship: {
-        day: null,
-        activity: null,
-        startAt: null,
-        endAt: null
+        dayActivities: [],
       }
+    }
+  },
+  mounted() {
+    this.getInterviewId()
+  },
+  methods: {
+    getInterviewId: function () {
+      this.interviewId = sessionStorage.getItem('interview') || 0
+      sessionStorage.clear()
+    },
+    createRelationship: function (event) {
+      // TODO: tratar objeto (this.relationship) para integrar com API
+      console.log('event create RELATIONSHIP:  ')
+      console.log(event)
+
+      this.relationship = {
+        "schedule_id": 0, // waiting merge (branch 012)
+        "week_number": 1, // TODO, is 1? 
+        "days": [ // array with 7 days
+          {
+          "week_id": 1,
+          "day_number": null,
+          "hours": [
+            {  // array with 24 hours
+            "activity_id": null,
+            "hour_number": null
+            }
+          ]
+        }]
+      }
+    },
+    createWeek: function () {
+      // TODO: integrar com API após objeto pronto
+      createWeek(this.relationship)
+      .then(res => {
+        this.$router.push('eventos')
+      })
+      .catch(err => {
+        this.$router.push('eventos')
+      })
+    },
+    pageChange: function (day) {
+      if (day === 6) this.isSunday = true
+      else this.isSunday = false
     }
   },
 }
 </script>
 
 <style scoped>
-
+.ml-27 {
+  margin-left: 27.1rem;
+}
+.btn-week {
+padding: 5px 45px;
+}
 </style>
