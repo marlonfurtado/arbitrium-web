@@ -9,7 +9,7 @@
         </span>
       </div>
     </div>
-    <input type="number" class="form-control" :value="start">
+    <input type="number" class="form-control" disabled="true" :value="start">
     <input type="number" class="form-control" :value="end">
   </div>
 </template>
