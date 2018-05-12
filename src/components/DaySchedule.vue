@@ -4,12 +4,7 @@
     <div class="row mt-1" :key="position" v-for="position in positions">
       <div class="col-md-11">
         <ActivityInput :activities="activities" :start="position" :end="position+1" class="mt-1"></ActivityInput>
-      </div>
-      <div class="col-md-1">
-        <button type="button" @click="removeActivity()" class="close mr-5 mt-3" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
+      </div>   
     </div>
 
     <div class="row mt-3 mb-2">
@@ -17,9 +12,10 @@
         <div class="input-group input-group-lg">
           <button type="button" @click="addActivity()" class="btn btn-outline-primary mr-2">Adicionar atividade</button>
           <button type="button" class="btn btn-outline-dark">Repetir para os próximos dias</button>
-        </div>
+        </div>    
       </div>
-    </div>
+      <button type="button" @click="removeActivity()" style="vertical-align:middle;margin-left: 334px;" class="btn btn-outline-danger">Remover última atividade</button>
+    </div>  
 
   </div>
 </template>
@@ -61,7 +57,8 @@ export default {
       this.positions++
     },
     removeActivity: function () {
-      this.positions--
+        if(this.positions > 1)
+          this.positions--;
     },
   }
 }
