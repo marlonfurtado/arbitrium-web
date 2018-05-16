@@ -2,8 +2,11 @@
   <div class="container">
     <!-- TITLE -->
     <div class="row">
-      <div class="col-md-11">
-        <h2>Semana</h2>
+      <div class="col-md-1">
+        <h4>ID {{interviewId}}</h4>
+      </div>
+      <div class="col-md-10">
+        <h2>Semana </h2>
         <h5>Insira suas atividades diárias</h5>
       </div>
       <div class="col-md-1">
@@ -40,6 +43,7 @@ export default {
   data: () => {
     return {
       days: ['Segunda-Feira','Terça-Feira','Quarta-Feira','Quinta-Feira','Sexta-Feira','Sábado','Domingo'],
+      interviewId: null,
       relationship: {
         day: null,
         activity: null,
@@ -48,6 +52,15 @@ export default {
       }
     }
   },
+  mounted() {
+    this.getInterviewId()
+  },
+  methods: {
+    getInterviewId: function () {
+      this.interviewId = sessionStorage.getItem('interview') || 0
+      sessionStorage.clear()
+    }
+  }
 }
 </script>
 
