@@ -6,20 +6,19 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
 
-	<div style="text-align: center;">
-		<a style="font-size: 90px;">Fim do Jogo</a>
-		<p style="font-size: 20px;">Obrigado por participar! Seu resultado final foi este:</p>
-	</div >
-<div id="boxResults">
-   <div id="boxHealth"><i class="material-icons" style="font-size:80px;">healing</i>{{health}}</div>
-   <div id="boxEnergy"><i class="material-icons" style="font-size:80px;">battery_charging_full</i>{{energy}}</div>
-   <div id="boxWork"><i class="material-icons" style="font-size:80px">work</i>{{work}}</div>
-   <div id="boxMoney"><i class="material-icons" style="font-size:80px;">monetization_on</i>{{money}}</div>
+    <div style="text-align: center;">
+        <a style="font-size: 90px;">Fim do Jogo</a>
+        <p style="font-size: 20px;">Obrigado por participar! Seu resultado final foi este:</p>
+    </div>
 
-</div>
+    <div id="boxResults">
+        <div id="boxHealth"><i class="material-icons" style="font-size:80px;">healing</i>{{health}}</div>
+        <div id="boxEnergy"><i class="material-icons" style="font-size:80px;">battery_charging_full</i>{{energy}}</div>
+        <div id="boxWork"><i class="material-icons" style="font-size:80px">work</i>{{work}}</div>
+        <div id="boxMoney"><i class="material-icons" style="font-size:80px;">monetization_on</i>{{money}}</div>
+    </div>
 
-  <div style= "margin-top: 600px;"><button class="btn-outline-primary btnLarger">Pronto!</button>  </div>
-
+  <div style= "margin-top: 600px;"><button class="btn-outline-primary btnLarger">Pronto!</button></div>
 </div>
 </template>
 
@@ -33,39 +32,33 @@ export default {
         energy: null,
         work:null,
         money:null
-     }
-     },
-     methods: {
-         results: function(){
-             getResults()
-             .then (results => {
-                 console.log("executando results")
-                 console.log(results)
-                 this.health=100 +" pts."
-                 this.energy=100 +" pts."
-                 this.work=100 +" pts."
-                 this.money=100 +" pts."
-
-             })
-             .catch (erro => {
-                console.log("executando erro")
-                console.log(erro)
-                this.health="*"
-                 this.energy="*"
-                 this.work="*"
-                 this.money="*"
-             })
-         }
-
-
-     },
-     mounted(){
-         this.results()
-     }
-
-
+    }
+  },
+  methods: {
+    results: function(){
+      getResults()
+      .then (results => {
+        console.log("executando results")
+        console.log(results)
+        this.health=100 +" pts."
+        this.energy=100 +" pts."
+        this.work=100 +" pts."
+        this.money=100 +" pts."
+      })
+      .catch (erro => {
+        console.log("executando erro")
+        console.log(erro)
+        this.health="*"
+        this.energy="*"
+        this.work="*"
+        this.money="*"
+      })
+    }
+  },
+  mounted(){
+    this.results()
   }
-
+}
 </script>
 
 <style scoped>
@@ -151,4 +144,3 @@ export default {
     -webkit-font-smoothing: antialiased;
 }
 </style>
-
