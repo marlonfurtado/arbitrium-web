@@ -90,10 +90,10 @@ export default {
       // TODO: integrar com API após objeto pronto
       createWeek(this.relationship)
       .then(res => {
-        this.$router.push('eventos')
+        this.$router.push('evento')
       })
       .catch(err => {
-        this.$router.push('eventos')
+        this.$router.push('evento')
       })
     },
     pageChange: function (day) {
@@ -101,15 +101,6 @@ export default {
       else this.isSunday = false
     }
   },
-  mounted() {
-    this.getInterviewId()
-  },
-  methods: {
-    getInterviewId: function () {
-      this.interviewId = sessionStorage.getItem('interview') || 0
-      sessionStorage.clear()
-    }
-  }
 }
 </script>
 

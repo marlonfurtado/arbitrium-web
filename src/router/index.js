@@ -25,6 +25,7 @@ export default new Router({
       name: 'Result',
       component: Result
     },
+    {
       path:'/evento',
       name: 'WeekSimulation',
       component: WeekSimulation
