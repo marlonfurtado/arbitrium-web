@@ -21,12 +21,15 @@ export default {
   data: () => {
     return {
       activitySelected: 'Atividade',
+      activityInput: {}
      }
   },
   methods: {
     setActivity: function (activity) {
       this.activitySelected = activity
-    }
+      this.activityInput = { activity: activity, start: this.start, end: this.end }
+      this.$emit("activityInput", this.activityInput);
+    },
   }
 }
 </script>
