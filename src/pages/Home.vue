@@ -10,8 +10,8 @@
     <p><a style="font-size: 24px;color: #666666;">cotidiano.</a></p>
   </div>
   <div align="center" style="margin-top: 60px;">
-    <button class="button" style="vertical-align:middle;margin-right: 100px;"><span>Resultados </span></button>
-    <button class="button" @click="createInterview" style="vertical-align:middle;margin-left: 100px;"><span>Iniciar </span></button>
+    <button class="btnLarger1 btn btn-outline-primary" style="vertical-align:middle;margin-right: 100px;"><span>Resultados </span></button>
+    <button class="btnLarger2 btn-outline-primary" @click="createInterview" style="vertical-align:middle;margin-left: 100px;"><span>Iniciar </span></button>
   </div>
 </div>
 </template>
@@ -54,20 +54,16 @@ export default {
 
 <style scoped>
 .btnLarger1 {
-
-    font-size: 30px;
-    margin-right: 50px;
-    padding: .5rem 1rem;
-    border-radius: .3rem;
-
+  font-size: 30px;
+  margin-right: 50px;
+  padding: .5rem 1rem;
+  border-radius: .3rem;
 }
 
 .btnLarger2 {
-
-    font-size: 30px;
-    margin-left: 50px;
-    padding: .5rem 1rem;
-    border-radius: .3rem;
-
+  font-size: 30px;
+  margin-left: 50px;
+  padding: .5rem 1rem;
+  border-radius: .3rem;
 }
 </style>

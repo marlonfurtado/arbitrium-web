@@ -28,30 +28,26 @@ export default {
   name: 'Result',
   data () {
     return {
-        health:null,
+        health: null,
         energy: null,
-        work:null,
-        money:null
+        work: null,
+        money: null
     }
   },
   methods: {
-    results: function(){
+    results: function() {
       getResults()
       .then (results => {
-        console.log("executando results")
-        console.log(results)
-        this.health=100 +" pts."
-        this.energy=100 +" pts."
-        this.work=100 +" pts."
-        this.money=100 +" pts."
+        this.health = results.health
+        this.energy = results.energy
+        this.work = results.work
+        this.money = results.money
       })
       .catch (erro => {
-        console.log("executando erro")
-        console.log(erro)
-        this.health="*"
-        this.energy="*"
-        this.work="*"
-        this.money="*"
+        this.health = "*"
+        this.energy = "*"
+        this.work = "*"
+        this.money = "*"
       })
     }
   },
