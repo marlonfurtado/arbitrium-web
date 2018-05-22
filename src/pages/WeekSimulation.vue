@@ -7,9 +7,9 @@
       </div>
       <div class="col-md-1">
         <router-link to="/">
-          <button class="btn btn-outline-danger">DESISTIR</button> 
+          <button class="btn btn-outline-danger">DESISTIR</button>
         </router-link>
-      </div>  
+      </div>
     </div>
 
     <!-- EVENT -->
@@ -21,7 +21,7 @@
 
       <div style="text-align: center; margin: 0 auto;" v-if="eventNumber > 2">
         <p>Semana concluída!</p>
-        <router-link to="/resultado" :events="events" :eventNumber=0> 
+        <router-link to="/resultado" :events="events" :eventNumber=0>
           <button class="btm btn-outline-primary btn-lg">Encerrar semana</button>
         </router-link>
       </div>
@@ -58,7 +58,7 @@ export default {
     if(!this.eventNumber){
       this.eventNumber = 0
     }
-    
+
   },
   methods: {
     getAllEvents: function () {
@@ -70,9 +70,9 @@ export default {
       .catch( function (err){
         //debugger;
         console.error('WeekSimulation, getEvents() ', err)
-        this.events = [{id: 1, description: "Seu chefe o convida para um happy hour com os diretores no final do expediente.  Ao mesmo tempo, você recebe uma mensagem de seu cônjuge lembrando da apresentação no colégio do seu filho. O que você faz?"}, 
+        this.events = [{id: 1, description: "Seu chefe o convida para um happy hour com os diretores no final do expediente.  Ao mesmo tempo, você recebe uma mensagem de seu cônjuge lembrando da apresentação no colégio do seu filho. O que você faz?"},
                        {id: 2, description: "Você tem muito trabalho a fazer, porém o tempo com sua família anda escasso. No final do expediente você escolheria jantar com sua família ou fazer hora extra?"},
-                       {id: 3, description: "Você acorda de manhã e seu filho não está se sentindo bem. Ao verificar sua agenda, lembra que tem uma reunião com um novo cliente em uma hora. Você leva seu filho ao médico ou vai para a reunião?"}, 
+                       {id: 3, description: "Você acorda de manhã e seu filho não está se sentindo bem. Ao verificar sua agenda, lembra que tem uma reunião com um novo cliente em uma hora. Você leva seu filho ao médico ou vai para a reunião?"},
                        {id: 4, description: "Ao checar o seu celular durante uma reunião com os diretores de sua organização, nota que recebeu cinco ligações de seu cônjuge. Você continua na reunião, ou pede para atender o telefone?"},
                        {id: 5, description: "Final de ano, seu chefe chama você para negociar suas férias. Porém, ele apresenta uma proposta de trabalho extra. Você sabe que seria bom para seu futuro na organização. O que você faz?"},
                        {id: 6, description: "Você está coordenando um novo projeto, porém seu cônjuge o convida para uma viagem de final de semana. Neste final de semana, você escolhe avançar o projeto ou viajar com família?"},
@@ -97,7 +97,7 @@ export default {
 
     incrementEvents(){
       this.eventNumber += 1
-    }      
+    }
 
   }
 }
