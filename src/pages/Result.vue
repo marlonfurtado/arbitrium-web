@@ -5,9 +5,13 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
-
-    <div style="text-align: center;">
-        <a style="font-size: 90px;">Fim do Jogo</a>
+    <div  style="float: right; margin-right: 50px">
+        <router-link to="/">
+            <button class="btn btn-outline-danger">DESISTIR</button> 
+        </router-link>
+    </div>
+    <div>
+        <p style="font-size: 90px;">Fim da Semana {{cont}}</p>
         <p style="font-size: 20px;">Obrigado por participar! Seu resultado final foi este:</p>
     </div>
 
@@ -17,8 +21,17 @@
         <div id="boxWork"><i class="material-icons" style="font-size:80px">work</i>{{work}}</div>
         <div id="boxMoney"><i class="material-icons" style="font-size:80px;">monetization_on</i>{{money}}</div>
     </div>
-
-  <div style= "margin-top: 600px;"><button class="btn-outline-primary btnLarger">Pronto!</button></div>
+  
+  <div style= "margin-top: 600px;" v-if="!end">
+      <router-link to="/agenda">
+      <button class="btn-outline-primary btnLarger">Continuar</button>
+      </router-link>
+  </div>
+  <div style= "margin-top: 600px;" v-if="end">
+      <router-link to="/">
+      <button class="btn-outline-primary btnLarger">Fim</button>
+      </router-link>
+  </div>
 </div>
 </template>
 
@@ -31,7 +44,9 @@ export default {
         health: null,
         family: null,
         work: null,
-        money: null
+        money: null,
+        end: false,
+        cont: 0 
     }
   },
   methods: {
@@ -49,11 +64,19 @@ export default {
         this.work = "*"
         this.money = "*"
       })
+    },
+      weeks(){
+        if (this.cont > 4){
+          this.end=true
+        }
+       cont++
     }
   },
   mounted(){
-    this.results()
-  }
+    this.results(),
+    this.weeks()
+    
+  },
 }
 </script>
 

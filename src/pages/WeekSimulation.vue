@@ -22,7 +22,7 @@
       <div style="text-align: center; margin: 0 auto;" v-if="eventNumber > 2">
         <p>Semana concluída!</p>
         <router-link to="/resultado" :events="events" :eventNumber=0> 
-          <button class="btm btn-outline-primary btn-lg">Encerrar semana</button>
+          <button class="btm btn-outline-primary btn-lg" v-on:click="weeks">Encerrar semana</button>
         </router-link>
       </div>
 
