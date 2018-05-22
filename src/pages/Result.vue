@@ -13,7 +13,7 @@
 
     <div id="boxResults">
         <div id="boxHealth"><i class="material-icons" style="font-size:80px;">healing</i>{{health}}</div>
-        <div id="boxEnergy"><i class="material-icons" style="font-size:80px;">battery_charging_full</i>{{energy}}</div>
+        <div id="boxFamily"><i class="material-icons" style="font-size:80px;">home</i>{{family}}</div>
         <div id="boxWork"><i class="material-icons" style="font-size:80px">work</i>{{work}}</div>
         <div id="boxMoney"><i class="material-icons" style="font-size:80px;">monetization_on</i>{{money}}</div>
     </div>
@@ -29,7 +29,7 @@ export default {
   data () {
     return {
         health: null,
-        energy: null,
+        family: null,
         work: null,
         money: null
     }
@@ -39,13 +39,13 @@ export default {
       getResults()
       .then (results => {
         this.health = results.health
-        this.energy = results.energy
+        this.family = results.family
         this.work = results.work
         this.money = results.money
       })
       .catch (erro => {
         this.health = "*"
-        this.energy = "*"
+        this.family = "*"
         this.work = "*"
         this.money = "*"
       })
@@ -67,11 +67,11 @@ export default {
     font-size: 40px;
     text-align: center;
     color: white;
-    background-color: #007bff;
+    background-color: #ffbd4a;
     margin-bottom: 50px;
 }
 
-#boxEnergy {
+#boxFamily {
     float: right;
     width: 350px;
     height: 170px;
@@ -79,7 +79,7 @@ export default {
     font-size: 40px;
     text-align: center;
     color: white;
-    background-color: #ffbd4a; 
+    background-color: #007bff; 
     margin-bottom: 50px;  
 }
 
