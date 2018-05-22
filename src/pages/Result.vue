@@ -11,7 +11,7 @@
         </router-link>
     </div>
     <div>
-        <p style="font-size: 90px;">Fim da Semana {{cont}}</p>
+        <p style="font-size: 90px;">Fim da Semana {{sessionStorage.getItem('cont')}}</p>
         <p style="font-size: 20px;">Obrigado por participar! Seu resultado final foi este:</p>
     </div>
 
@@ -69,8 +69,10 @@ export default {
         if (this.cont > 4){
           this.end=true
         }
-       cont++
-    }
+       this.cont++
+       sessionStorage.setItem('cont', this.cont)
+        }
+    
   },
   mounted(){
     this.results(),
