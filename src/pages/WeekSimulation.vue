@@ -28,8 +28,8 @@
       <!-- CONTINUE BUTTON -->
       <div class="quit-div" v-if="closeWeek">
         <p>Semana concluída!</p>
-        <router-link to="/resultado" :events="events" :eventNumber=0>
-          <button class="btm btn-outline-primary btn-lg">Encerrar semana</button>
+        <router-link to="/resultado" :events="events" :eventNumber=0> 
+          <button class="btm btn-outline-primary btn-lg" v-on:click="weeks">Encerrar semana</button>
         </router-link>
       </div>
     </div>
