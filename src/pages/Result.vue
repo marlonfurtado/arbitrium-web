@@ -11,7 +11,7 @@
         </router-link>
     </div>
     <div>
-        <p style="font-size: 90px;">Fim da Semana {{sessionStorage.getItem('cont')}}</p>
+        <p style="font-size: 90px;">Fim da Semana {{cont}}</p>
         <p style="font-size: 20px;">Obrigado por participar! Seu resultado final foi este:</p>
     </div>
 
@@ -24,7 +24,7 @@
   
   <div style= "margin-top: 600px;" v-if="!end">
       <router-link to="/agenda">
-      <button class="btn-outline-primary btnLarger">Continuar</button>
+      <button class="btn-outline-primary btnLarger" v-on:click="cont += 1">Continuar</button>
       </router-link>
   </div>
   <div style= "margin-top: 600px;" v-if="end">
@@ -46,7 +46,7 @@ export default {
         work: null,
         money: null,
         end: false,
-        cont: 0 
+        cont: 1 
     }
   },
   methods: {
@@ -69,9 +69,9 @@ export default {
         if (this.cont > 4){
           this.end=true
         }
-       this.cont++
-       sessionStorage.setItem('cont', this.cont)
-        }
+       sessionStorage.getItem('cont')
+       sessionStorage.setItem('cont', this.cont) 
+    }
     
   },
   mounted(){
