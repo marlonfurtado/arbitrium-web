@@ -63,7 +63,7 @@ export default {
   methods: {
     getInterviewId: function () {
       this.interviewId = sessionStorage.getItem('interview') || 0
-      sessionStorage.clear()
+     // sessionStorage.clear()
     },
     createRelationship: function (event) {
       // TODO: tratar objeto (this.relationship) para integrar com API
