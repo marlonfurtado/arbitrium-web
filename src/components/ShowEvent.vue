@@ -7,8 +7,8 @@
       </div>
     </div>
     <div align="center" style="margin-top: 60px;">
-      <button class="btn btn-outline-primary btn-lg" @click="postAnswear('F', event.id)" style="vertical-align:middle;margin-right: 80px;"><span>Escolho minha família</span></button>
-      <button class="btn btn-outline-primary btn-lg" @click="postAnswear('W', event.id)" style="vertical-align:middle;margin-left: 80px;"><span>Escolho meu trabalho </span></button>
+      <button class="btn btn-outline-primary btn-ans" @click="postAnswear('F', event.id)"><span>{{event.op_family}}</span></button>
+      <button class="btn btn-outline-primary btn-ans" @click="postAnswear('W', event.id)"><span>{{event.op_work}} </span></button>
     </div>
   </div>
 </template>
@@ -49,31 +49,7 @@
         this.$emit('respondido')
       },
 
-      //MODELO ABAIXO, EXCLUIR DEPOIS
-      createInterview: function () {
-      const data = { researcher_id: 1 }
-      create(data)
-      .then(res => {
-        if (res.status === 200) {
-          // 'res.data' is a Array, so get id from last position
-          const interviewId = res.data[res.data.length - 1].id
 
-          // Save ID in sessionStorage to get it in schedule
-          sessionStorage.setItem('interview', interviewId)
-        } else {
-          sessionStorage.setItem('interview', 0)
-        }
-
-        // always redirect
-        this.$router.push('agenda')
-      })
-      .catch(err => {
-        console.error('Erro ao criar entrevista: ', err)
-        sessionStorage.setItem('interview', 0)
-        this.$router.push('agenda')
-      })
-      }
-      //FIM DO MODELO
     }
 }
 
@@ -94,5 +70,12 @@
   background-color: rgba(0, 0, 0, 0.0);
   width: 60%;
   height: 350px;
+}
+
+.btn-ans{
+  margin-top: 10px;
+  width: 100%;
+  height: 50px;
+  vertical-align: middle
 }
 </style>
