@@ -44,9 +44,7 @@
       </router-link>
   </div>
   <div style= "margin-top: 600px;" v-if="end">
-      <router-link to="/">
-      <button class="btn-outline-primary btnLarger">Fim</button>
-      </router-link>
+    <button class="btn-outline-primary btnLarger" @click="clearStorage">Fim</button>
   </div>
 </div>
 </template>
@@ -81,12 +79,15 @@ export default {
         this.money = "*"
       })
     },
-      addCont: function (){
-          this.cont  = sessionStorage.getItem('cont') ||1
-          this.cont++
-          sessionStorage.setItem('cont', this.cont) 
-
-        }  
+    addCont: function (){
+      this.cont  = sessionStorage.getItem('cont') ||1
+      this.cont++
+      sessionStorage.setItem('cont', this.cont) 
+    },
+    clearStorage: function () {
+      sessionStorage.clear()
+      this.$router.push('/')
+    }
   },
   mounted(){
     this.results()
