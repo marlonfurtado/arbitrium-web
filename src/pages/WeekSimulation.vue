@@ -7,8 +7,8 @@
         <h1>O tempo está passando</h1>
       </div>
       <div class="col-md-1">
-        <router-link to="/">
-          <button class="btn btn-outline-danger" @click="clearSession">DESISTIR</button>
+        <router-link to="/fim">
+          <button class="btn btn-outline-danger">DESISTIR</button>
         </router-link>
       </div>
     </div>

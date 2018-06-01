@@ -28,7 +28,7 @@
     <div class="row mt-4 mb-5">
       <div class="col-md-5">
         <div class="input-group input-group-lg">
-          <button type="button" @click="addActivity()" class="btn btn-outline-primary mr-2">Adicionar atividade</button>
+          <button type="button" v-bind:disabled="hours.end[hours.end.length-1]==24" @click="addActivity()" class="btn btn-outline-primary mr-2">Adicionar atividade</button>
           <button type="button" class="btn btn-outline-dark">Repetir para os próximos dias</button>
           
         </div>
@@ -58,7 +58,7 @@ export default {
       activitiesFromInputs: [],
       hours: { start: [0], end: [1]},
       positions: 1,
-      message: ""
+      message: "",
     }
   },
   mounted() {
@@ -82,7 +82,11 @@ export default {
       if (!position && !endHour) {
         const lastHour = _.last(this.hours.end)
         this.hours.start.push(lastHour)
-        this.hours.end.push(lastHour + 1)
+        if(lastHour < 24)
+          this.hours.end.push(lastHour + 1)
+        else 
+          this.hours.end.push(24)
+
         return
       }
 
@@ -100,7 +104,9 @@ export default {
     },
     addActivity: function () {
       // TODO: Validations to add new activity
-      if (this.positions < 23) this.positions++
+      if (this.positions < 23){
+        this.positions++
+      }
       this.hoursManager()
     },
     removeActivity: function () {
