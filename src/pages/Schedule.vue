@@ -16,9 +16,9 @@
 
     <!-- SCHEDULE -->
     <div class="row align-items-center mt-5 mb-1">
-      <carousel @pageChange="pageChange" class="col pt-2 pb-2" :per-page="1" :mouse-drag="true" :navigation-enabled="true">
+      <carousel class="col pt-2 pb-2" @pageChange="pageChange" :per-page="1" :mouse-drag="true" :navigation-enabled="true">
 
-        <slide :key="day" v-for="day in days">
+        <slide class="carousel-wrapper" :key="day" v-for="day in days">
           <DaySchedule @dayActivities="createRelationship($event)" :day="day"></DaySchedule>
         </slide>
 
@@ -110,5 +110,9 @@ export default {
 }
 .btn-week {
 padding: 5px 45px;
+}
+.carousel-wrapper {
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 </style>

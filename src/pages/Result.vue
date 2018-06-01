@@ -10,16 +10,32 @@
             <button class="btn btn-outline-danger">DESISTIR</button> 
         </router-link>
     </div>
-    <div>
+    <div class="container">
         <p style="font-size: 90px;">Fim da Semana {{cont}}</p>
-        <p style="font-size: 20px;">Obrigado por participar! Seu resultado final foi este:</p>
+        <p style="font-size: 20px;">Obrigado por participar! Seu resultado foi:</p>
     </div>
 
     <div id="boxResults">
-        <div id="boxHealth"><i class="material-icons" style="font-size:80px;">healing</i>{{health}}</div>
-        <div id="boxFamily"><i class="material-icons" style="font-size:80px;">home</i>{{family}}</div>
-        <div id="boxWork"><i class="material-icons" style="font-size:80px">work</i>{{work}}</div>
-        <div id="boxMoney"><i class="material-icons" style="font-size:80px;">monetization_on</i>{{money}}</div>
+        <div id="boxHealth">
+            <i class="material-icons" style="font-size:80px;">healing</i>
+            <span class="font-weight-bold">{{health}}</span>
+            <p class="small">Saúde</p>
+        </div>
+        <div id="boxFamily">
+            <i class="material-icons" style="font-size:80px;">home</i>
+            <span class="font-weight-bold">{{family}}</span>
+            <p class="small">Família</p>
+        </div>
+        <div id="boxWork">
+            <i class="material-icons" style="font-size:80px">work</i>
+            <span class="font-weight-bold">{{work}}</span>
+            <p class="small">Trabalho</p>
+        </div>
+        <div id="boxMoney">
+            <i class="material-icons" style="font-size:80px;">monetization_on</i>
+            <span class="font-weight-bold">{{money}}</span>
+            <p class="small">Dinheiro</p>
+        </div>
     </div>
   
   <div style= "margin-top: 600px;" v-if="!end">
@@ -85,7 +101,7 @@ export default {
     float: left;
     width: 350px;
     height: 170px;
-    padding:35px;
+    padding:20px;
     font-size: 40px;
     text-align: center;
     color: white;
@@ -97,7 +113,7 @@ export default {
     float: right;
     width: 350px;
     height: 170px;
-    padding: 35px;
+    padding: 20px;
     font-size: 40px;
     text-align: center;
     color: white;
@@ -109,7 +125,7 @@ export default {
     float: left;
     width: 350px;
     height: 170px;
-    padding: 35px;
+    padding: 20px;
     font-size: 40px;
     text-align: center;
     color: white;
@@ -120,7 +136,7 @@ export default {
     float: right;
     width: 350px;
     height: 170px;
-    padding: 35px;
+    padding: 20px;
     font-size: 40px;
     text-align: center;
     color: white;
@@ -129,21 +145,17 @@ export default {
 
 #boxResults {
     position: relative;
-    width: 50%;
-    position: relative;
+    width: 55%;
     align-items: center;
-    left: 25%;
+    left: 21%;
     margin-top: 100px;
     margin-bottom: 100px;
-
 }
 
 .btnLarger {
-
     font-size: 30px;
     padding: .5rem 1rem;
     border-radius: .3rem;
-
 }
 
 .material-icons {

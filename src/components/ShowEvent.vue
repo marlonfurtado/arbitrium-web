@@ -1,14 +1,14 @@
 <template>
-  <div class="container">
-    <div style="text-align: center;">
-      <p style="font-size: 36px;">Novo evento</p>
-      <div style="text-align: center; margin: 0 auto; height: 150px">
+  <div class="floating-div">
+    <div>
+      <h2>Novo evento!</h2>
+      <div>
         <p style="font-size: 22px;">{{event.description}}</p>
       </div>
     </div>
     <div align="center" style="margin-top: 60px;">
-      <button class="btn btn-outline-primary btn-lg" @click="postAnswear('F', event.id)" style="vertical-align:middle;margin-right: 80px;"><span>Escolho minha família</span></button>
-      <button class="btn btn-outline-primary btn-lg" @click="postAnswear('W', event.id)" style="vertical-align:middle;margin-left: 80px;"><span>Escolho meu trabalho </span></button>
+      <button class="btn btn-outline-primary btn-ans" @click="postAnswear('F', event.id)"><span>{{event.op_family}}</span></button>
+      <button class="btn btn-outline-primary btn-ans" @click="postAnswear('W', event.id)"><span>{{event.op_work}} </span></button>
     </div>
   </div>
 </template>
@@ -21,59 +21,46 @@
   export default {
     props: ['event'],
 
+    data(){
+      return{
+        appearTime: this.getDate()
+      }
+    },
+
     components: {
       WeekSimulation,
     },
+
     methods: {
       postAnswear: function(answear, id){
         const data = {
           researcher_id: 1,
           event_id: id,
-          question_appears_datetime: "2018:04:21T18:30:50",
-          answered_question_datetime: "2018-04-21T18:30:54",
+          question_appears_datetime: this.appearTime,
+          answered_question_datetime: this.getDate(),
           choice: answear
         }
+
         create(data)
         .then(res => {
           if (res.status === 200){
             console.log(res)
           } else {
-            console.log("não deu certo")
             console.log(res.data)
           }
         })
         .catch(err => {
-          console.log("erro")
           console.error('Erro ao criar question: ', err)
         })
-        this.$emit('respondido')
+        .then(this.$emit('componentClick'))
       },
 
-      //MODELO ABAIXO, EXCLUIR DEPOIS
-      createInterview: function () {
-      const data = { researcher_id: 1 }
-      create(data)
-      .then(res => {
-        if (res.status === 200) {
-          // 'res.data' is a Array, so get id from last position
-          const interviewId = res.data[res.data.length - 1].id
+      getDate(){
+        var currentDate = new Date()
+        var dateTime = `${currentDate.getFullYear()}-${(currentDate.getMonth()+1)}-${currentDate.getDate()}T${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`
+        return dateTime
+      },
 
-          // Save ID in sessionStorage to get it in schedule
-          sessionStorage.setItem('interview', interviewId)
-        } else {
-          sessionStorage.setItem('interview', 0)
-        }
-
-        // always redirect
-        this.$router.push('agenda')
-      })
-      .catch(err => {
-        console.error('Erro ao criar entrevista: ', err)
-        sessionStorage.setItem('interview', 0)
-        this.$router.push('agenda')
-      })
-      }
-      //FIM DO MODELO
     }
 }
 
@@ -90,9 +77,36 @@
   padding-right: 6rem;
 }
 
-.container {
-  background-color: rgba(0, 0, 0, 0.0);
+.floating-div{
+  position: fixed;
   width: 60%;
-  height: 350px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  border-radius: 15px;
+  border-style: solid;
+  border-color: #007bff;
+  background-color: rgba(255, 255, 255, 0.90)
+}
+
+.answers-div{
+  margin-top: 60px;
+}
+
+.btn-full{
+  margin-bottom: 10px;
+  width: 100%
+}
+
+body{
+  background-color: rgba(0, 0, 0, 0.295)
+}
+
+.btn-ans{
+  margin-top: 10px;
+  width: 100%;
+  height: 50px;
+  vertical-align: middle
 }
 </style>
