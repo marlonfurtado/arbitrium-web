@@ -40,12 +40,12 @@
   
   <div style= "margin-top: 600px;" v-if="!end">
       <router-link to="/agenda">
-        <button class="btn-outline-primary btnLarger mb-5" v-on:click="cont += 1">Continuar</button>
+      <button class="btn-outline-primary btnLarger" v-on:click="addCont">Continuar</button>
       </router-link>
   </div>
   <div style= "margin-top: 600px;" v-if="end">
       <router-link to="/">
-        <button class="btn-outline-primary btnLarger">Fim</button>
+      <button class="btn-outline-primary btnLarger">Fim</button>
       </router-link>
   </div>
 </div>
@@ -62,7 +62,7 @@ export default {
         work: null,
         money: null,
         end: false,
-        cont: 1 
+        cont: sessionStorage.getItem('cont') || 1
     }
   },
   methods: {
@@ -81,19 +81,16 @@ export default {
         this.money = "*"
       })
     },
-      weeks(){
-        if (this.cont > 4){
-          this.end=true
-        }
-       sessionStorage.getItem('cont')
-       sessionStorage.setItem('cont', this.cont) 
-    }
-    
+      addCont: function (){
+          this.cont  = sessionStorage.getItem('cont') ||1
+          this.cont++
+          sessionStorage.setItem('cont', this.cont) 
+
+        }  
   },
   mounted(){
-    this.results(),
-    this.weeks()
-    
+    this.results()
+    if (this.cont >= 4) this.end=true
   },
 }
 </script>
