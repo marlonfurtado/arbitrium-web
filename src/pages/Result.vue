@@ -5,20 +5,49 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
-
-    <div style="text-align: center;">
-        <a style="font-size: 90px;">Fim do Jogo</a>
-        <p style="font-size: 20px;">Obrigado por participar! Seu resultado final foi este:</p>
+    <div  style="float: right; margin-right: 50px">
+        <router-link to="/">
+            <button class="btn btn-outline-danger">DESISTIR</button> 
+        </router-link>
+    </div>
+    <div class="container">
+        <p style="font-size: 90px;">Fim da Semana {{cont}}</p>
+        <p style="font-size: 20px;">Obrigado por participar! Seu resultado foi:</p>
     </div>
 
     <div id="boxResults">
-        <div id="boxHealth"><i class="material-icons" style="font-size:80px;">healing</i>{{health}}</div>
-        <div id="boxEnergy"><i class="material-icons" style="font-size:80px;">battery_charging_full</i>{{energy}}</div>
-        <div id="boxWork"><i class="material-icons" style="font-size:80px">work</i>{{work}}</div>
-        <div id="boxMoney"><i class="material-icons" style="font-size:80px;">monetization_on</i>{{money}}</div>
+        <div id="boxHealth">
+            <i class="material-icons" style="font-size:80px;">healing</i>
+            <span class="font-weight-bold">{{health}}</span>
+            <p class="small">Saúde</p>
+        </div>
+        <div id="boxFamily">
+            <i class="material-icons" style="font-size:80px;">home</i>
+            <span class="font-weight-bold">{{family}}</span>
+            <p class="small">Família</p>
+        </div>
+        <div id="boxWork">
+            <i class="material-icons" style="font-size:80px">work</i>
+            <span class="font-weight-bold">{{work}}</span>
+            <p class="small">Trabalho</p>
+        </div>
+        <div id="boxMoney">
+            <i class="material-icons" style="font-size:80px;">monetization_on</i>
+            <span class="font-weight-bold">{{money}}</span>
+            <p class="small">Dinheiro</p>
+        </div>
     </div>
-
-  <div style= "margin-top: 600px;"><button class="btn-outline-primary btnLarger">Pronto!</button></div>
+  
+  <div style= "margin-top: 600px;" v-if="!end">
+      <router-link to="/agenda">
+        <button class="btn-outline-primary btnLarger mb-5" v-on:click="cont += 1">Continuar</button>
+      </router-link>
+  </div>
+  <div style= "margin-top: 600px;" v-if="end">
+      <router-link to="/">
+        <button class="btn-outline-primary btnLarger">Fim</button>
+      </router-link>
+  </div>
 </div>
 </template>
 
@@ -29,9 +58,11 @@ export default {
   data () {
     return {
         health: null,
-        energy: null,
+        family: null,
         work: null,
-        money: null
+        money: null,
+        end: false,
+        cont: 1 
     }
   },
   methods: {
@@ -39,21 +70,31 @@ export default {
       getResults()
       .then (results => {
         this.health = results.health
-        this.energy = results.energy
+        this.family = results.family
         this.work = results.work
         this.money = results.money
       })
       .catch (erro => {
         this.health = "*"
-        this.energy = "*"
+        this.family = "*"
         this.work = "*"
         this.money = "*"
       })
+    },
+      weeks(){
+        if (this.cont > 4){
+          this.end=true
+        }
+       sessionStorage.getItem('cont')
+       sessionStorage.setItem('cont', this.cont) 
     }
+    
   },
   mounted(){
-    this.results()
-  }
+    this.results(),
+    this.weeks()
+    
+  },
 }
 </script>
 
@@ -63,23 +104,23 @@ export default {
     float: left;
     width: 350px;
     height: 170px;
-    padding:35px;
+    padding:20px;
     font-size: 40px;
     text-align: center;
     color: white;
-    background-color: #007bff;
+    background-color: #ffbd4a;
     margin-bottom: 50px;
 }
 
-#boxEnergy {
+#boxFamily {
     float: right;
     width: 350px;
     height: 170px;
-    padding: 35px;
+    padding: 20px;
     font-size: 40px;
     text-align: center;
     color: white;
-    background-color: #ffbd4a; 
+    background-color: #007bff; 
     margin-bottom: 50px;  
 }
 
@@ -87,7 +128,7 @@ export default {
     float: left;
     width: 350px;
     height: 170px;
-    padding: 35px;
+    padding: 20px;
     font-size: 40px;
     text-align: center;
     color: white;
@@ -98,7 +139,7 @@ export default {
     float: right;
     width: 350px;
     height: 170px;
-    padding: 35px;
+    padding: 20px;
     font-size: 40px;
     text-align: center;
     color: white;
@@ -107,21 +148,17 @@ export default {
 
 #boxResults {
     position: relative;
-    width: 50%;
-    position: relative;
+    width: 55%;
     align-items: center;
-    left: 25%;
+    left: 21%;
     margin-top: 100px;
     margin-bottom: 100px;
-
 }
 
 .btnLarger {
-
     font-size: 30px;
     padding: .5rem 1rem;
     border-radius: .3rem;
-
 }
 
 .material-icons {

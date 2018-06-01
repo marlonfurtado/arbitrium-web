@@ -9,8 +9,14 @@
         </span>
       </div>
     </div>
-    <input type="number" class="form-control" disabled="true" :value="start">
-    <input type="number" class="form-control" :value="end">
+    <input type="text" class="form-control" v-model.number="startValue" @change="changeValue()" disabled="true">
+    <input type="text"
+           name="endHour"
+           class="form-control"
+           :class="{'is-invalid': errors.first('endHour')}"
+           v-validate="`required|min_value:${startValue}|max_value:24`"
+           v-model.number="endValue"
+           @blur="changeValue()">
   </div>
 </template>
 
@@ -18,17 +24,38 @@
 export default {
   name: 'ActivityInput',
   props: ['activities', 'start', 'end'],
-  data: () => {
+  data: function () {
     return {
       activitySelected: 'Atividade',
-      activityInput: {}
+      activityInput: {},
+      startValue: this.start,
+      endValue: this.end
      }
+  },
+  watch: {
+    start: function () {
+      this.startValue = this.start
+      this.changeValue()
+    },
+    end: function () {
+      this.endValue = this.end
+      this.changeValue()
+    },
   },
   methods: {
     setActivity: function (activity) {
       this.activitySelected = activity
-      this.activityInput = { activity: activity, start: this.start, end: this.end }
+      this.activityInput = { activity: activity, start: this.startValue, end: this.endValue }
       this.$emit("activityInput", this.activityInput);
+    },
+    changeValue: function () {
+      if (this.endValue <= this.startValue) this.endValue = this.startValue + 1
+      if (this.startValue < 0) this.startValue = 0
+      if (this.startValue > 23) this.startValue = 23
+      if (this.endValue < 1) this.endValue = 1
+      if (this.endValue > 24) this.endValue = 24
+
+      this.$emit('changedEndHour', this.endValue)
     },
   }
 }
@@ -36,21 +63,14 @@ export default {
 
 <style scoped>
 .input-prepend-size {
-  width: 800px;
+  width: 850px;
 }
 .dropdown-size {
-  width: 800px;
+  width: 850px;
 }
 .scrollable-dropdown {
   height: auto;
   max-height: 200px;
   overflow-x: hidden;
-}
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  margin: 0; 
 }
 </style>
