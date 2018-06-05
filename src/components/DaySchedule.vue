@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <p class="font-weight-bold mb-4">{{day}}</p>
+    <h5>{{day}}</h5>
 
     <!-- TODO: HEADER -->
     <div class="container">

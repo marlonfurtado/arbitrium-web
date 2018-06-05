@@ -60,7 +60,7 @@ export default {
         work: null,
         money: null,
         end: false,
-        cont: sessionStorage.getItem('cont') || 1
+        cont: sessionStorage.getItem('weekCounter') || 1
     }
   },
   methods: {
@@ -80,9 +80,9 @@ export default {
       })
     },
     addCont: function (){
-      this.cont  = sessionStorage.getItem('cont') ||1
+      this.cont  = sessionStorage.getItem('weekCounter') ||1
       this.cont++
-      sessionStorage.setItem('cont', this.cont) 
+      sessionStorage.setItem('weekCounter', this.cont) 
     },
     clearStorage: function () {
       sessionStorage.clear()
@@ -155,6 +155,7 @@ export default {
 
 .btnLarger {
     font-size: 30px;
+    width: 200px;
     padding: .5rem 1rem;
     border-radius: .3rem;
 }

@@ -1,17 +1,17 @@
 <template>
 <div class="home">
-  <div style="text-align: center;">
-    <a style="font-size: 110px;color: #666666;">Arbitrium</a>
-    <p style="font-size: 36px;color: #666666;">Seja Bem-vindo!!</p>
+  <div>
+    <a class="welcome-title">Arbitrium</a>
+    <p class="welcome-text">Seja Bem-vindo!</p>
   </div>
-  <div style="text-align: center;">
-    <p><a style="font-size: 24px;color: #666666;">Arbitrium é uma tarefa criada por pesquisadores para ajudar a entender</a></p>
-    <p><a style="font-size: 24px;color: #666666;">como as pessoas tomam decisões e fazem a gestão do tempo em seu</a></p>
-    <p><a style="font-size: 24px;color: #666666;">cotidiano.</a></p>
+  <div>
+    <p><a class="welcome-text">Arbitrium é uma tarefa criada por pesquisadores para ajudar</a></p>
+    <p><a class="welcome-text">a entender como as pessoas tomam decisões e fazem a gestão do tempo</a></p>
+    <p><a class="welcome-text">em seu cotidiano.</a></p>
   </div>
   <div align="center" style="margin-top: 60px;">
-    <button class="btnLargerGeneric btnLarger1 btn-outline-primary" @click="showReport"><span>Resultados </span></button>
-    <button class="btnLargerGeneric btnLarger2 btn-outline-primary" @click="createInterview"><span>Iniciar </span></button>
+    <button class="btnLargerGeneric btnLarger1 btn-outline-primary btn-fixed-width" @click="showReport"><span>Resultados </span></button>
+    <button class="btnLargerGeneric btnLarger2 btn-outline-primary btn-fixed-width" @click="createInterview"><span>Iniciar </span></button>
   </div>
 </div>
 </template>
@@ -57,6 +57,16 @@ export default {
 
 <style scoped>
 
+.welcome-title{
+  font-size: 110px;
+  color: #666666;
+}
+
+.welcome-text{
+  font-size: 24px;
+  color: #666666;
+}
+
 .btnLargerGeneric {
   font-size: 30px;
   margin-right: 50px;
@@ -71,6 +81,10 @@ export default {
 
 .btnLarger2 {
   margin-left: 100px;
+}
+
+.btn-fixed-width{
+  width: 200px
 }
 
 </style>
