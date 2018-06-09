@@ -8,6 +8,11 @@ import GameOver from '@/pages/GameOver'
 
 Vue.use(Router)
 
+if (process.env.API_SERVER)
+  var apiServer = process.env.API_SERVER
+else
+  var apiServer = 'localhost'
+
 export default new Router({
   mode: 'history',
   routes: [
@@ -35,6 +40,18 @@ export default new Router({
       path: '/fim',
       name: 'GameOver',
       component: GameOver
+    },
+    {
+      path:'/relatorio',
+      name: 'Report',
+      component: WeekSimulation,
+      /* beforeEnter function: called before the route that renders this component is confirmed.
+         We used it in order to dont leave the page while downloading report through api call.
+         reference: https://router.vuejs.org/guide/advanced/navigation-guards.html#per-route-guard
+      */
+      beforeEnter() {
+        window.location = 'http://' + apiServer + ':3000'+'/report'
+      }
     },
   ]
 })
