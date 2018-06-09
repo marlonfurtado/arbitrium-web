@@ -2,7 +2,6 @@
   <div class="container">
     <h5>{{day}}</h5>
 
-    <!-- TODO: HEADER -->
     <div class="container">
       <div class="row mt-4 p-2 bg-secondary text-white border border-secondary rounded shadow-sm">
         <div class="font-weight-bold col-md-8 pl-10">Atividade</div>
@@ -19,7 +18,8 @@
         @changedEndHour="hoursManager(position, $event);"
         :activities="activities"
         :start="hours.start[position-1]"
-        :end="hours.end[position-1]">
+        :end="hours.end[position-1]"
+        :isDisabled="position !== positions">
         </ActivityInput>
 
       </div>
@@ -30,13 +30,12 @@
         <div class="input-group input-group-lg">
           <button type="button" v-bind:disabled="hours.end[hours.end.length-1]==24" @click="addActivity()" class="btn btn-outline-primary mr-2">Adicionar atividade</button>
           <button type="button" class="btn btn-outline-dark">Repetir para os próximos dias</button>
-          
         </div>
       </div>
-      
       <button type="button" @click="removeActivity()" id="removeButton" class="btn btn-outline-danger">Remover última atividade</button>
     </div>
 
+    <p v-if="alert" class="alert alert-warning">{{alert}}</p>
   </div>
 </template>
 
@@ -58,7 +57,7 @@ export default {
       activitiesFromInputs: [],
       hours: { start: [0], end: [1]},
       positions: 1,
-      message: "",
+      alert: ""
     }
   },
   mounted() {
@@ -82,15 +81,17 @@ export default {
       if (!position && !endHour) {
         const lastHour = _.last(this.hours.end)
         this.hours.start.push(lastHour)
-        if(lastHour < 24)
-          this.hours.end.push(lastHour + 1)
-        else 
-          this.hours.end.push(24)
 
+        if(lastHour < 24) {
+          this.hours.end.push(lastHour + 1)
+        } else {
+          this.hours.end.push(24)
+        }
+
+        this.verifyHour()
         return
       }
 
-      this.hours.start[position] = endHour 
       this.hours.end[position-1] = endHour
 
       for (let i = position + 1; i < this.hours.start.length; i++) {
@@ -99,15 +100,23 @@ export default {
         }
       }
 
-      this.$forceUpdate();
-      this.counterHours();
+      this.$forceUpdate()
+      this.verifyHour()
     },
     addActivity: function () {
-      // TODO: Validations to add new activity
-      if (this.positions < 23){
+      this.alert = null
+      // double negation to return a boolean
+      const hasActivityOnLastPosition = !!(this.dayActivities[this.day] && this.dayActivities[this.day][this.positions-1])
+      const hasHourOnLastPosition = !!this.hours.end[this.positions-1]
+
+      if (this.positions < 23 && hasHourOnLastPosition && hasActivityOnLastPosition) {
         this.positions++
+        this.hoursManager()
+      } else {
+        this.alert = "Por favor, preencha a última atividade."
       }
-      this.hoursManager()
+
+      this.verifyHour()
     },
     removeActivity: function () {
       if(this.positions > 1) {
@@ -117,31 +126,19 @@ export default {
       }
     },
     registerInput: function (event) {
-      // TODO
+      event.position = this.positions - 1
       this.activitiesFromInputs.push(event)
       this.dayActivities[this.day] = this.activitiesFromInputs
 
-      this.$emit("dayActivities", this.dayActivities)
+      this.verifyHour()
     },
-    counterHours: function () {
-      let totalDay = 0
-      for (let i = 0; i < this.hours.end.length; i++) {
-        const diff = this.hours.end[i] - this.hours.start[i]
-        totalDay += diff
-      }
-      try{
-        if(totalDay === 24) {
-          this.$emit("totalDay", totalDay)
+    verifyHour: function () {
+      if(_.last(this.hours.end) === 24) {
+        this.$emit("totalDay", _.last(this.hours.end))
+
+        if (this.dayActivities[this.day] && this.dayActivities[this.day][this.positions-1]) {
+          this.$emit("dayActivities", this.dayActivities)
         }
-        else if(totalDay > 24) {
-          throw "Possui mais de 24 horas!";
-        }  
-        else{ 
-          throw "Possui menos de 24 horas!";
-        }   
-      }
-      catch(err){
-        this.message = "ATENÇÃO!! O dia " + err;
       }
     }
   }

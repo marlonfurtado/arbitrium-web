@@ -39,7 +39,7 @@
 // Vue carousel for each day in the schedule
 import { Carousel, Slide } from 'vue-carousel'
 import { getAll as getActivities } from '../services/activity'
-import { create as createWeek } from '../services/week'
+import { create } from '../services/week'
 import DaySchedule from '../components/DaySchedule'
 import _ from "underscore"
 
@@ -54,6 +54,7 @@ export default {
     return {
       isSunday: false,
       days: ['Segunda-Feira','Terça-Feira','Quarta-Feira','Quinta-Feira','Sexta-Feira','Sábado','Domingo'],
+      activitiesByDay: new Array(7),
       interviewId: null,
       relationship: {
         dayActivities: [],
@@ -69,35 +70,70 @@ export default {
   methods: {
     getInterviewId: function () {
       this.interviewId = sessionStorage.getItem('interview') || 0
-     // sessionStorage.clear()
     },
     createRelationship: function (event) {
-      // TODO: tratar objeto (this.relationship) para integrar com API
-      this.relationship = {
-        "schedule_id": 0, // waiting merge (branch 012)
-        "week_number": 1, // TODO, is 1? 
-        "days": [ // array with 7 days
-          {
-          "week_id": 1,
-          "day_number": null,
-          "hours": [
-            {  // array with 24 hours
-            "activity_id": null,
-            "hour_number": null
-            }
-          ]
-        }]
+      let weekNumber = sessionStorage.getItem("weekCounter") || 1
+
+      // days array to integration with API
+      const helperDays = {
+        'Domingo': 1,
+        'Segunda-Feira': 2,
+        'Terça-Feira': 3,
+        'Quarta-Feira': 4,
+        'Quinta-Feira': 5,
+        'Sexta-Feira': 6,
+        'Sábado': 7
       }
+
+      if (event) {
+        const dayName = Object.keys(event)[0]
+        const dayPosition = helperDays[dayName]
+
+        if (_.isUndefined(this.activitiesByDay[dayPosition-1])) {
+          this.activitiesByDay[dayPosition-1] = {
+            "day_number": null,
+            "hours": new Array(24),
+          }
+        }
+
+        // add day to object [0: domingo, 1: segunda...]
+        this.activitiesByDay[dayPosition-1].day_number = dayPosition
+
+        // API need 24h to hours array
+        for (let hour = 0; hour < 24; hour++) {
+          // Find position from end hour: _.find(array, conditions)
+          // get position where hour is equal to activity end hour.
+          let activityPosition = _.find(event[dayName], function(activity) { return hour <= activity.end }).position
+
+          if (hour <= event[dayName][activityPosition].end) {
+            this.activitiesByDay[dayPosition-1].hours[hour] = {
+              "activity_id": event[dayName][activityPosition].activity.id,
+              "hour_number": hour
+            }
+          }
+
+        }
+      }
+
+      this.relationship = {
+        "schedule_id": this.interviewId,
+        "week_number": weekNumber,
+        "days": this.activitiesByDay
+      }
+
       this.verifyHour();
     },
     createWeek: function () {
-      // TODO: integrar com API após objeto pronto
-      createWeek(this.relationship)
+      create(this.relationship)
       .then(res => {
-        this.$router.push('evento')
+        if (res.status === 200) {
+          this.$router.push('evento')
+        } else {
+          console.error("Erro ao criar agenda. ", res)
+        }
       })
       .catch(err => {
-        this.$router.push('evento')
+        console.error("Erro ao criar agenda. ", err.response)
       })
     },
     pageChange: function (day) {
