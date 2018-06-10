@@ -10,8 +10,8 @@
     <p><a style="font-size: 24px;color: #666666;">cotidiano.</a></p>
   </div>
   <div align="center" style="margin-top: 60px;">
-    <button class="btnLarger1 btn btn-outline-primary" style="vertical-align:middle;margin-right: 100px;"><span>Resultados </span></button>
-    <button class="btnLarger2 btn-outline-primary" @click="createInterview" style="vertical-align:middle;margin-left: 100px;"><span>Iniciar </span></button>
+    <button class="btnLargerGeneric btnLarger1 btn-outline-primary" @click="showReport"><span>Resultados </span></button>
+    <button class="btnLargerGeneric btnLarger2 btn-outline-primary" @click="createInterview"><span>Iniciar </span></button>
   </div>
 </div>
 </template>
@@ -47,23 +47,30 @@ export default {
         sessionStorage.setItem('interview', 0)
         this.$router.push('agenda')
       })
+    },
+    showReport: function(){
+       this.$router.push('relatorio')
     }
   }
 }
 </script>
 
 <style scoped>
-.btnLarger1 {
+
+.btnLargerGeneric {
   font-size: 30px;
   margin-right: 50px;
   padding: .5rem 1rem;
   border-radius: .3rem;
+  vertical-align: middle;
+}
+
+.btnLarger1 {
+  margin-right: 100px;
 }
 
 .btnLarger2 {
-  font-size: 30px;
-  margin-left: 50px;
-  padding: .5rem 1rem;
-  border-radius: .3rem;
+  margin-left: 100px;
 }
+
 </style>
