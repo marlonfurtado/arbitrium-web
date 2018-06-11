@@ -19,15 +19,15 @@
       <carousel class="col pt-2 pb-2" @pageChange="pageChange" :per-page="1" :mouse-drag="true" :navigation-enabled="true">
 
         <slide class="carousel-wrapper" :key="day" v-for="day in days">
-          <DaySchedule @dayActivities="createRelationship($event)" :day="day"></DaySchedule>
+          <DaySchedule @dayActivities="createRelationship($event);" @totalDay="setCountHoursInDays($event,day)" :day="day"></DaySchedule>
         </slide>
 
       </carousel>
     </div>
 
-    <div v-if="isSunday" class="col-md-2 ml-27">
+    <div v-if="isSunday && canStart" class="col-md-2 ml-27">
       <div class="input-group input-group-lg">
-        <button type="button" @click="createWeek" class="btn btn-primary btn-week">Iniciar simulação</button>
+        <button type="button" @click="createWeek" class="btn btn-primary btn-week" >Iniciar simulação</button>
       </div>
     </div>
   </div>
@@ -39,6 +39,7 @@ import { Carousel, Slide } from 'vue-carousel'
 import { getAll as getActivities } from '../services/activity'
 import { create as createWeek } from '../services/week'
 import DaySchedule from '../components/DaySchedule'
+import _ from "underscore"
 
 export default {
   name: 'Schedule',
@@ -55,7 +56,9 @@ export default {
       relationship: {
         dayActivities: [],
       },
-      week: sessionStorage.getItem('weekCounter') || 1
+      week: sessionStorage.getItem('weekCounter') || 1,
+      countHoursInDay: {},
+      canStart: false
     }
   },
   mounted() {
@@ -68,9 +71,6 @@ export default {
     },
     createRelationship: function (event) {
       // TODO: tratar objeto (this.relationship) para integrar com API
-      console.log('event create RELATIONSHIP:  ')
-      console.log(event)
-
       this.relationship = {
         "schedule_id": 0, // waiting merge (branch 012)
         "week_number": 1, // TODO, is 1? 
@@ -86,6 +86,7 @@ export default {
           ]
         }]
       }
+      this.verifyHour();
     },
     createWeek: function () {
       // TODO: integrar com API após objeto pronto
@@ -98,9 +99,32 @@ export default {
       })
     },
     pageChange: function (day) {
-      if (day === 6) this.isSunday = true
-      else this.isSunday = false
+      if (day >= 6 ) {
+        this.isSunday = true
+        this.verifyHour()
+      }
+      else{ 
+        this.isSunday = false;
+      }  
+    },
+    setCountHoursInDays: function(total,day){
+      this.countHoursInDay[day] = total
+    },
+    verifyHour: function(){
+      const values = _.values(this.countHoursInDay)
+      if(values.length === 7){
+        for(let i = 0 ; i < values.length; i++){
+          if(values[i] !== 24){ 
+            return this.canStart = false
+          }
+        }
+       this.canStart = true
+      }
+      else{
+        this.canStart = false
+      }
     }
+
   },
 }
 </script>
