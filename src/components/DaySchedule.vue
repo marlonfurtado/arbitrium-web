@@ -16,7 +16,7 @@
 
         <ActivityInput class="mt-1"
         @activityInput="registerInput($event)"
-        @changedEndHour="hoursManager(position, $event)"
+        @changedEndHour="hoursManager(position, $event);"
         :activities="activities"
         :start="hours.start[position-1]"
         :end="hours.end[position-1]">
@@ -30,9 +30,11 @@
         <div class="input-group input-group-lg">
           <button type="button" @click="addActivity()" class="btn btn-outline-primary mr-2">Adicionar atividade</button>
           <button type="button" class="btn btn-outline-dark">Repetir para os próximos dias</button>
+          
         </div>
       </div>
-      <button type="button" @click="removeActivity()" style="vertical-align:middle;margin-left: 425px;" class="btn btn-outline-danger">Remover última atividade</button>
+      
+      <button type="button" @click="removeActivity()" id="removeButton" class="btn btn-outline-danger">Remover última atividade</button>
     </div>
 
   </div>
@@ -56,6 +58,7 @@ export default {
       activitiesFromInputs: [],
       hours: { start: [0], end: [1]},
       positions: 1,
+      message: ""
     }
   },
   mounted() {
@@ -83,8 +86,8 @@ export default {
         return
       }
 
-      this.hours.start[position] = endHour  // Próxima posição começa com a "hora fim" da ultima
-      this.hours.end[position-1] = endHour  // Atualiza vetor de horas com a nova "hora fim" do input
+      this.hours.start[position] = endHour 
+      this.hours.end[position-1] = endHour
 
       for (let i = position + 1; i < this.hours.start.length; i++) {
         if(this.hours.start[i]) {
@@ -92,7 +95,8 @@ export default {
         }
       }
 
-      this.$forceUpdate()
+      this.$forceUpdate();
+      this.counterHours();
     },
     addActivity: function () {
       // TODO: Validations to add new activity
@@ -112,6 +116,27 @@ export default {
       this.dayActivities[this.day] = this.activitiesFromInputs
 
       this.$emit("dayActivities", this.dayActivities)
+    },
+    counterHours: function () {
+      let totalDay = 0
+      for (let i = 0; i < this.hours.end.length; i++) {
+        const diff = this.hours.end[i] - this.hours.start[i]
+        totalDay += diff
+      }
+      try{
+        if(totalDay === 24) {
+          this.$emit("totalDay", totalDay)
+        }
+        else if(totalDay > 24) {
+          throw "Possui mais de 24 horas!";
+        }  
+        else{ 
+          throw "Possui menos de 24 horas!";
+        }   
+      }
+      catch(err){
+        this.message = "ATENÇÃO!! O dia " + err;
+      }
     }
   }
 }
@@ -129,5 +154,9 @@ export default {
 }
 .pl-6 {
   padding-left: 6.5rem;
+}
+#removeButton{
+  vertical-align:middle;
+  margin-left: 425px;
 }
 </style>
