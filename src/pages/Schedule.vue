@@ -3,10 +3,10 @@
     <!-- TITLE -->
     <div class="row">
       <div class="col-md-1">
-        <h4>ID {{interviewId}}</h4>
+        <p>ID {{interviewId}}</p>
       </div>
       <div class="col-md-10">
-        <h2>Semana </h2>
+        <h5>Semana {{week}}</h5>
         <h5>Insira suas atividades diárias</h5>
       </div>
       <div class="col-md-1">
@@ -54,7 +54,8 @@ export default {
       interviewId: null,
       relationship: {
         dayActivities: [],
-      }
+      },
+      week: sessionStorage.getItem('weekCounter') || 1
     }
   },
   mounted() {
@@ -109,7 +110,8 @@ export default {
   margin-left: 27.1rem;
 }
 .btn-week {
-padding: 5px 45px;
+  font-size: 26px;
+  padding: 10px;
 }
 .carousel-wrapper {
   overflow-x: hidden;

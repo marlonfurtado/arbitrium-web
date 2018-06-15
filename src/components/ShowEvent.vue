@@ -1,16 +1,20 @@
 <template>
-  <div class="floating-div">
-    <div>
-      <h2>Novo evento!</h2>
-      <div>
-        <p style="font-size: 22px;">{{event.description}}</p>
+  <transition name="modal"> 
+    <div class="modal-mask">
+      <div class="floating-div">
+        <div>
+          <h2>Novo evento!</h2>
+          <div>
+            <p class="event-txt">{{event.description}}</p>
+          </div>
+        </div>
+        <div class="answers-div">
+          <button class="btn btn-outline-primary btn-ans" @click="postAnswear('F', event.id)"><span>{{event.op_family}}</span></button>
+          <button class="btn btn-outline-primary btn-ans" @click="postAnswear('W', event.id)"><span>{{event.op_work}} </span></button>
+        </div>
       </div>
     </div>
-    <div align="center" style="margin-top: 60px;">
-      <button class="btn btn-outline-primary btn-ans" @click="postAnswear('F', event.id)"><span>{{event.op_family}}</span></button>
-      <button class="btn btn-outline-primary btn-ans" @click="postAnswear('W', event.id)"><span>{{event.op_work}} </span></button>
-    </div>
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -57,7 +61,12 @@
 
       getDate(){
         var currentDate = new Date()
-        var dateTime = `${currentDate.getFullYear()}-${(currentDate.getMonth()+1)}-${currentDate.getDate()}T${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`
+        var dateTime = `${currentDate.getFullYear()}-
+                        ${(currentDate.getMonth()+1)}-
+                        ${currentDate.getDate()}T
+                        ${currentDate.getHours()}:
+                        ${currentDate.getMinutes()}:
+                        ${currentDate.getSeconds()}`
         return dateTime
       },
 
@@ -68,45 +77,59 @@
 
 <style scoped>
 
-.big-font{
-  font: helvetica;
-  font-size: 32px;
-}
+  .modal-mask {
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .5);
+    display: table;
+    transition: opacity .3s ease;
+  }
 
-.pr-6 {
-  padding-right: 6rem;
-}
+  .floating-div{
+    position: fixed;
+    width: 60%;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border-radius: 15px;
+    border-style: solid;
+    border-color: #007bff;
+    background-color: rgba(255, 255, 255, 0.96);  
+    transition: all .3s ease;
+  }
 
-.floating-div{
-  position: fixed;
-  width: 60%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 20px;
-  border-radius: 15px;
-  border-style: solid;
-  border-color: #007bff;
-  background-color: rgba(255, 255, 255, 0.90)
-}
+  .answers-div{
+    margin-top: 60px
+  }
 
-.answers-div{
-  margin-top: 60px;
-}
+  .btn-ans{
+    margin-top: 10px;
+    width: 100%;
+    height: 50px;
+    vertical-align: middle  
+  }
 
-.btn-full{
-  margin-bottom: 10px;
-  width: 100%
-}
+  .event-txt{
+    margin-top: 30px;
+    font-size: 22px;
+  }
 
-body{
-  background-color: rgba(0, 0, 0, 0.295)
-}
+  .modal-enter {
+    opacity: 0;
+  }
 
-.btn-ans{
-  margin-top: 10px;
-  width: 100%;
-  height: 50px;
-  vertical-align: middle
-}
+  .modal-leave-active {
+    opacity: 0; 
+  }
+
+  .modal-enter .modal-container,
+  .modal-leave-active .modal-container {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
 </style>
