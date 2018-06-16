@@ -10,7 +10,9 @@
         <h5>Insira suas atividades diárias</h5>
       </div>
       <div class="col-md-1">
-        <button class="btn btn-outline-danger">DESISTIR</button>
+        <router-link to="/fim">
+            <button class="btn btn-outline-danger">DESISTIR</button>
+        </router-link>
       </div>
     </div>
 

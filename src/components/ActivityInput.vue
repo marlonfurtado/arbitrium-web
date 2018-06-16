@@ -10,7 +10,7 @@
       </div>
     </div>
     <input type="text" class="form-control" v-model.number="startValue" @change="changeValue()" disabled="true">
-    <input type="text"
+    <input type="number" min="0" max="24"
            name="endHour"
            class="form-control"
            :class="{'is-invalid': errors.first('endHour')}"

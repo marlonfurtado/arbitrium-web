@@ -6,44 +6,44 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
     <div  style="float: right; margin-right: 50px">
-        <router-link to="/">
-            <button class="btn btn-outline-danger">DESISTIR</button> 
+        <router-link to="/fim">
+            <button class="btn btn-outline-danger" @click="clearSession">DESISTIR</button> 
         </router-link>
     </div>
     <div class="container">
         <p style="font-size: 90px;">Fim da Semana {{cont}}</p>
-        <p style="font-size: 20px;">Obrigado por participar! Seu resultado foi:</p>
+        <p style="font-size: 20px;"> Seu resultado foi:</p>
     </div>
 
     <div id="boxResults">
         <div id="boxHealth">
-            <i class="material-icons" style="font-size:80px;">healing</i>
+            <img src="../assets/heartbeat.png" height="80px">
             <span class="font-weight-bold">{{health}}</span>
             <p class="small">Saúde</p>
         </div>
-        <div id="boxFamily">
-            <i class="material-icons" style="font-size:80px;">home</i>
+        <div id="boxMoney">
+            <img src="../assets/money.png" height="80px">
             <span class="font-weight-bold">{{family}}</span>
-            <p class="small">Família</p>
+            <p class="small">Dinheiro</p>
         </div>
         <div id="boxWork">
-            <i class="material-icons" style="font-size:80px">work</i>
+            <img src="../assets/work.png" height="80px">
             <span class="font-weight-bold">{{work}}</span>
             <p class="small">Trabalho</p>
         </div>
-        <div id="boxMoney">
-            <i class="material-icons" style="font-size:80px;">monetization_on</i>
+        <div id="boxFamily">
+            <img src="../assets/home.png" height="80px">
             <span class="font-weight-bold">{{money}}</span>
-            <p class="small">Dinheiro</p>
+            <p class="small">Familia</p>
         </div>
     </div>
   
-  <div style= "margin-top: 600px;" v-if="!end">
+  <div style= "margin-top: 550px;" v-if="!end">
       <router-link to="/agenda">
       <button class="btn-outline-primary btnLarger" v-on:click="addCont">Continuar</button>
       </router-link>
   </div>
-  <div style= "margin-top: 600px;" v-if="end">
+  <div style= "margin-top: 550px;" v-if="end">
     <button class="btn-outline-primary btnLarger" @click="clearStorage">Fim</button>
   </div>
 </div>
@@ -54,16 +54,20 @@ import {get as getResults} from "../services/results"
 export default {
   name: 'Result',
   data () {
+
     return {
         health: null,
         family: null,
         work: null,
         money: null,
         end: false,
-        cont: sessionStorage.getItem('weekCounter') || 1
+        cont: sessionStorage.getItem('cont') || 1
     }
   },
   methods: {
+    clearSession(){
+      sessionStorage.clear()
+    },  
     results: function() {
       getResults()
       .then (results => {
@@ -80,9 +84,9 @@ export default {
       })
     },
     addCont: function (){
-      this.cont  = sessionStorage.getItem('weekCounter') ||1
+      this.cont  = sessionStorage.getItem('cont') ||1
       this.cont++
-      sessionStorage.setItem('weekCounter', this.cont) 
+      sessionStorage.setItem('cont', this.cont) 
     },
     clearStorage: function () {
       sessionStorage.clear()
@@ -118,8 +122,7 @@ export default {
     font-size: 40px;
     text-align: center;
     color: white;
-    background-color: #007bff; 
-    margin-bottom: 50px;  
+    background-color: #007bff;   
 }
 
 #boxWork {
@@ -142,6 +145,7 @@ export default {
     text-align: center;
     color: white;
     background-color: #99e265;   
+    margin-bottom: 50px;
 }
 
 #boxResults {
@@ -149,13 +153,11 @@ export default {
     width: 55%;
     align-items: center;
     left: 21%;
-    margin-top: 100px;
-    margin-bottom: 100px;
+    margin-top: 50px;
 }
 
 .btnLarger {
     font-size: 30px;
-    width: 200px;
     padding: .5rem 1rem;
     border-radius: .3rem;
 }
