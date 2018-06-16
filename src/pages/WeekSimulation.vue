@@ -42,6 +42,7 @@
 
 import ShowEvent from '../components/ShowEvent';
 import { getAll as getEvents } from '../services/event'
+import {create} from '../services/questions'
 import _ from "underscore"
 
 export default {
@@ -65,7 +66,8 @@ export default {
       secondEvent: "",
       thirdEvent: "",
       currentEvent:"",
-      closeWeek: false
+      closeWeek: false,
+      interviewId: sessionStorage.getItem("interview") || 0
     }
   },
 
@@ -113,13 +115,32 @@ export default {
       }.bind(this))
     },
 
+    postQuestion(element){
+      const data = {
+        event_id: element.id,
+        interview_id: this.interviewId,
+      }
+      console.log(data)
+      create(data)
+      .then(res => {
+        if (res.status === 200){
+          console.log(res)
+        } else {
+            console.log(res.data)
+        }
+      })
+    },
+
     eventSelection: function() {
       this.events = _.shuffle(this.events)
       this.firstEvent = this.events[0]
+      this.postQuestion(this.firstEvent)
       this.removeEvent(0)
       this.secondEvent = this.events[0]
+      this.postQuestion(this.secondEvent)
       this.removeEvent(0)
       this.thirdEvent = this.events[0]
+      this.postQuestion(this.thirdEvent)
       this.removeEvent(0)
       sessionStorage.setItem('events',JSON.stringify(this.events))//since we can't set an object in session storage, we have to convert them to a JSON
     },
