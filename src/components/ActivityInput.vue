@@ -1,11 +1,17 @@
 <template>
   <div class="input-group input-group-lg">
     <div class="input-group-prepend">
-      <button class="btn btn-outline-secondary dropdown-toggle input-prepend-size" type="button"
-              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{activitySelected}}</button>
+      <button type="button"
+              class="btn btn-outline-secondary dropdown-toggle input-prepend-size"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+              v-bind:disabled="isDisabled">
+              {{activitySelected}}
+      </button>
       <div class="dropdown-menu dropdown-size scrollable-dropdown">
         <span :key="activity.id" v-for="activity in activities">
-          <a class="dropdown-item" @click="setActivity(activity.description)">{{activity.description}}</a>
+          <a class="dropdown-item" @click="setActivity(activity)">{{activity.description}}</a>
         </span>
       </div>
     </div>
@@ -16,14 +22,15 @@
            :class="{'is-invalid': errors.first('endHour')}"
            v-validate="`required|min_value:${startValue}|max_value:24`"
            v-model.number="endValue"
-           @blur="changeValue()">
+           @blur="changeValue()"
+           v-bind:disabled="isDisabled">
   </div>
 </template>
 
 <script>
 export default {
   name: 'ActivityInput',
-  props: ['activities', 'start', 'end'],
+  props: ['activities', 'start', 'end', 'isDisabled'],
   data: function () {
     return {
       activitySelected: 'Atividade',
@@ -44,9 +51,9 @@ export default {
   },
   methods: {
     setActivity: function (activity) {
-      this.activitySelected = activity
+      this.activitySelected = activity.description
       this.activityInput = { activity: activity, start: this.startValue, end: this.endValue }
-      this.$emit("activityInput", this.activityInput);
+      this.$emit("activityInput", this.activityInput)
     },
     changeValue: function () {
       if (this.endValue <= this.startValue) this.endValue = this.startValue + 1
