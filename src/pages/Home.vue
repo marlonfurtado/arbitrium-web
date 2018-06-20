@@ -32,11 +32,14 @@ export default {
         if (res.status === 200) {
           // 'res.data' is a Array, so get id from last position
           const interviewId = res.data[res.data.length - 1].id
+          const scheduleId = res.data[res.data.length - 1].schedule[0].id
 
           // Save ID in sessionStorage to get it in schedule
           sessionStorage.setItem('interview', interviewId)
+          sessionStorage.setItem('schedule', scheduleId)
         } else {
           sessionStorage.setItem('interview', 0)
+          sessionStorage.setItem('schedule', 0)
         }
 
         // always redirect
@@ -45,6 +48,7 @@ export default {
       .catch(err => {
         console.error('Erro ao criar entrevista: ', err)
         sessionStorage.setItem('interview', 0)
+        sessionStorage.setItem('schedule', 0)
         this.$router.push('agenda')
       })
     },
