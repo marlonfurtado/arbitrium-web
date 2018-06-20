@@ -20,7 +20,7 @@
 <script>
   import WeekSimulation from '../pages/WeekSimulation'
   import _ from "underscore"
-  import {create} from '../services/questions'
+  import {update} from '../services/questions'
 
   export default {
     props: ['event'],
@@ -40,12 +40,13 @@
         const data = {
           researcher_id: 1,
           event_id: id,
+          interview_id: sessionStorage.getItem("interview") || 0,
           question_appears_datetime: this.appearTime,
           answered_question_datetime: this.getDate(),
           choice: answear
         }
-
-        create(data)
+        console.log(data)
+        update(data)
         .then(res => {
           if (res.status === 200){
             console.log(res)
@@ -61,14 +62,25 @@
 
       getDate(){
         var currentDate = new Date()
-        var dateTime = `${currentDate.getFullYear()}-
-                        ${(currentDate.getMonth()+1)}-
-                        ${currentDate.getDate()}T
-                        ${currentDate.getHours()}:
-                        ${currentDate.getMinutes()}:
-                        ${currentDate.getSeconds()}`
+        var day = currentDate.getDate()
+        day = this.validateTime(day)
+        var month = currentDate.getMonth() + 1
+        month = this.validateTime(month)
+        var hour = currentDate.getHours()
+        hour = this.validateTime(hour)
+        var minute = currentDate.getMinutes()
+        minute = this.validateTime(minute)
+        var second = currentDate.getSeconds()
+        second = this.validateTime(second)
+        var dateTime = `${currentDate.getFullYear()}-${month}-${day}T${hour}:${minute}:${second}`              
         return dateTime
       },
+
+      validateTime(time){
+        if (time < 10)
+          return "0" + time
+        return time
+      }
 
     }
 }
