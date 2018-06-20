@@ -6,8 +6,10 @@
     
         <div>
             <h1>Arbitrium</h1>
-            <a>Obrigado por participar!</a>
-            <p>Sua participação foi muito importante para nós!</p>
+            </br>
+            <a class="goodbye-text">Obrigado por participar!</a>
+            </br>
+            <a class="goodbye-text">Sua participação foi muito importante para nós!</a>
         </div>
     
 
@@ -38,26 +40,19 @@ export default {
     border-radius: .3rem;
 }
 
-h1{
-    color: #666666;
-    font-size: 110px;
+.goodbye-text{
+  font-size: 24px;
+  color: #666666;
 }
 
-p{
-    font-size: 40px;
-
+h1{
+    font-size: 110px;
 }
 
 img{
     margin-left: auto;
     margin-right: auto;
     width: 50%
-}
-
-a{
-    color: #666666;
-    font-size: 50px;
-    
 }
 
 div{
