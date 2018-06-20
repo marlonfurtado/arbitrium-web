@@ -56,6 +56,7 @@ export default {
       days: ['Segunda-Feira','Terça-Feira','Quarta-Feira','Quinta-Feira','Sexta-Feira','Sábado','Domingo'],
       activitiesByDay: new Array(7),
       interviewId: null,
+      scheduleId: null,
       relationship: {
         dayActivities: [],
       },
@@ -66,10 +67,14 @@ export default {
   },
   mounted() {
     this.getInterviewId()
+    this.getScheduleId()
   },
   methods: {
     getInterviewId: function () {
       this.interviewId = sessionStorage.getItem('interview') || 0
+    },
+    getScheduleId: function () {
+      this.scheduleId = sessionStorage.getItem('schedule') || 0
     },
     createRelationship: function (event) {
       let weekNumber = sessionStorage.getItem("weekCounter") || 1
@@ -116,7 +121,7 @@ export default {
       }
 
       this.relationship = {
-        "schedule_id": this.interviewId,
+        "schedule_id": this.scheduleId,
         "week_number": weekNumber,
         "days": this.activitiesByDay
       }
