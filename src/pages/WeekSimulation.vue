@@ -2,7 +2,9 @@
   <div class="container">
     <!-- TITLE -->
     <div class="row">
-      <div class="col-md-1"></div>
+      <div class="col-md-1">
+        <p>Serial: {{interviewId}}</p>
+      </div>
       <div class="col-md-10">
         <h1>O tempo está passando</h1>
       </div>
@@ -80,10 +82,12 @@ export default {
       this.eventTime()
       this.startTime()
     }
+    this.getInterviewId()
   },
-
   methods: {
-
+    getInterviewId: function () {
+      this.interviewId = sessionStorage.getItem('interview') || 0
+    },
     clearSession(){
       sessionStorage.clear()
     },

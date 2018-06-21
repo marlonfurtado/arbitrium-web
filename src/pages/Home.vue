@@ -37,9 +37,11 @@ export default {
           // Save ID in sessionStorage to get it in schedule
           sessionStorage.setItem('interview', interviewId)
           sessionStorage.setItem('schedule', scheduleId)
+          sessionStorage.setItem('weekCounter', 1)
         } else {
           sessionStorage.setItem('interview', 0)
           sessionStorage.setItem('schedule', 0)
+          sessionStorage.setItem('weekCounter', 1)
         }
 
         // always redirect
