@@ -30,7 +30,7 @@
 <script>
 export default {
   name: 'ActivityInput',
-  props: ['activities', 'start', 'end', 'isDisabled'],
+  props: ['activities', 'start', 'end', 'isDisabled', 'position'],
   data: function () {
     return {
       activitySelected: 'Atividade',
@@ -52,7 +52,7 @@ export default {
   methods: {
     setActivity: function (activity) {
       this.activitySelected = activity.description
-      this.activityInput = { activity: activity, start: this.startValue, end: this.endValue }
+      this.activityInput = { activity: activity, start: this.startValue, end: this.endValue, position: this.position }
       this.$emit("activityInput", this.activityInput)
     },
     changeValue: function () {
