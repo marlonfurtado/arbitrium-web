@@ -19,6 +19,7 @@
         :activities="activities"
         :start="hours.start[position-1]"
         :end="hours.end[position-1]"
+        :position="position"
         :isDisabled="position !== positions">
         </ActivityInput>
 
@@ -98,6 +99,11 @@ export default {
         if(this.hours.start[i]) {
           this.hours.start[i] = this.hours.end[i-1]
         }
+      }
+
+      let lastActivity = _.last(this.dayActivities[this.day])      
+      if (lastActivity && lastActivity.end && lastActivity.position === this.positions-1) {
+        lastActivity.end = _.last(this.hours.end)
       }
 
       this.$forceUpdate()
