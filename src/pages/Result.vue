@@ -1,5 +1,8 @@
 <template>
 <div>
+    <div class="col-md-1">
+      <p>Serial: {{interviewId}}</p>
+    </div>
   <div style="float: right; margin-right: 50px">
     <router-link to="/fim">
       <button class="btn btn-outline-danger">DESISTIR</button>
@@ -60,17 +63,23 @@ export default {
       MAX_WEEKS: 4
     }
   },
+  mounted() {
+    this.getInterviewId()
+  },
   methods: {
+    getInterviewId: function () {
+      this.interviewId = sessionStorage.getItem('interview') || 0
+    },
     clearSession(){
       sessionStorage.clear()
     },  
     results: function() {
       getResults(this.interviewId)
       .then(results => {
-        this.health = results.data.status_health_activity
-        this.family = results.data.status_family_activity
-        this.work = results.data.status_work_activity
-        this.money = results.data.status_money_activity
+        this.health = results.data.status_health_activity + results.data.status_health_event
+        this.family = results.data.status_family_activity + results.data.status_family_event
+        this.work = results.data.status_work_activity + results.data.status_work_event
+        this.money = results.data.status_money_activity + results.data.status_money_event
       })
       .catch(error => {
         console.error('Erro ao calcular resultados.',  error)

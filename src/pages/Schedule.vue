@@ -3,7 +3,7 @@
     <!-- TITLE -->
     <div class="row">
       <div class="col-md-1">
-        <p>ID {{interviewId}}</p>
+        <p>Serial: {{interviewId}}</p>
       </div>
       <div class="col-md-10">
         <h5>Semana {{week}}</h5>
