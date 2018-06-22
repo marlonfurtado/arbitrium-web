@@ -71,10 +71,6 @@ export default {
       })
       .catch(err => {
         console.error('DaySchedule, getActivies() ', err)
-        this.activities = [{ id: 1, description: "Dormir" },
-                           { id: 2, description: "Comer" },
-                           { id: 3, description: "Deslocamento do trabalho" },
-                           { id: 4, description: "Trabalho" }]
       })
     },
     hoursManager: function (position, endHour) {

@@ -8,6 +8,7 @@
       <div class="col-md-10">
         <h5>Semana {{week}}</h5>
         <h5>Insira suas atividades diárias</h5>
+        <p v-if="alert" class="alert alert-warning">{{alert}}</p>
       </div>
       <div class="col-md-1">
         <router-link to="/fim">
@@ -27,7 +28,7 @@
       </carousel>
     </div>
 
-    <div v-if="isSunday && canStart" class="col-md-2 ml-27">
+    <div v-if="isSunday" class="col-md-2 ml-27">
       <div class="input-group input-group-lg">
         <button type="button" @click="createWeek" class="btn btn-primary btn-week" >Iniciar simulação</button>
       </div>
@@ -62,7 +63,8 @@ export default {
       },
       week: sessionStorage.getItem('weekCounter') || 1,
       countHoursInDay: {},
-      canStart: false
+      canStart: false,
+      alert: ""
     }
   },
   mounted() {
@@ -129,6 +131,7 @@ export default {
       this.verifyHour();
     },
     createWeek: function () {
+      this.alert = null
       create(this.relationship)
       .then(res => {
         if (res.status === 200) {
@@ -139,6 +142,7 @@ export default {
       })
       .catch(err => {
         console.error("Erro ao criar agenda. ", err.response)
+        this.alert = "Por favor,verifique se todos os dias tem 24 Horas e selecione novamente a ultima atividade de Domingo"
       })
     },
     pageChange: function (day) {
@@ -167,7 +171,6 @@ export default {
         this.canStart = false
       }
     }
-
   },
 }
 </script>
