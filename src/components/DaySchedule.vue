@@ -30,7 +30,6 @@
       <div class="col-md-5">
         <div class="input-group input-group-lg">
           <button type="button" v-bind:disabled="hours.end[hours.end.length-1]==24" @click="addActivity()" class="btn btn-outline-primary mr-2">Adicionar atividade</button>
-          <button type="button" class="btn btn-outline-dark">Repetir para os próximos dias</button>
         </div>
       </div>
       <button type="button" @click="removeActivity()" id="removeButton" class="btn btn-outline-danger">Remover última atividade</button>
