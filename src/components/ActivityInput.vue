@@ -30,10 +30,10 @@
 <script>
 export default {
   name: 'ActivityInput',
-  props: ['activities', 'start', 'end', 'isDisabled', 'position'],
+  props: ['activities', 'start', 'end', 'isDisabled', 'position', 'previousActivity'],
   data: function () {
     return {
-      activitySelected: 'Atividade',
+      activitySelected: this.previousActivity || 'Atividade',
       activityInput: {},
       startValue: this.start,
       endValue: this.end
@@ -48,6 +48,9 @@ export default {
       this.endValue = this.end
       this.changeValue()
     },
+  },
+  mounted(){
+    this.checkPrevious()
   },
   methods: {
     setActivity: function (activity) {
@@ -64,6 +67,11 @@ export default {
 
       this.$emit('changedEndHour', this.endValue)
     },
+    checkPrevious(){
+      if(this.previousActivity){
+        console.log("Há atividades anteriores")
+      }
+    }
   }
 }
 </script>

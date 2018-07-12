@@ -10,13 +10,17 @@
       </div>
     </div>
 
+    <div class="min-height">
+
     <div class="row mt-1" :key="position" v-for="position in positions">
       <div class="col-md-12">
 
-        <ActivityInput class="mt-1"
+        <!--SE HOUVER REPETIÇÃO, DEVO ENVIAR, TAMBÉM, TODAS AS ESCOLHAS DO DIA ANTERIOR. -->
+        <ActivityInput class="mt-1" v-if="repeat"
         @activityInput="registerInput($event)"
         @changedEndHour="hoursManager(position, $event);"
         :activities="activities"
+        :previousActivity="prevActivity[position-1]"
         :start="hours.start[position-1]"
         :end="hours.end[position-1]"
         :position="position"
@@ -26,10 +30,13 @@
       </div>
     </div>
 
+    </div>
+
     <div class="row mt-4 mb-5">
       <div class="col-md-5">
         <div class="input-group input-group-lg">
           <button type="button" v-bind:disabled="hours.end[hours.end.length-1]==24" @click="addActivity()" class="btn btn-outline-primary mr-2">Adicionar atividade</button>
+          <button @click="generateRepeated()">Gerar dia repetido</button>
         </div>
       </div>
       <button type="button" @click="removeActivity()" id="removeButton" class="btn btn-outline-danger">Remover última atividade</button>
@@ -54,14 +61,18 @@ export default {
     return {
       activities: [],
       dayActivities: {},
+      prevActivity: [],
       activitiesFromInputs: [],
       hours: { start: [0], end: [1]},
       positions: 1,
-      alert: ""
+      alert: "",
+      repeat: false,
+      previousDay:""
     }
   },
   mounted() {
-    this.getAllActivities()
+    this.getAllActivities()//Checks if the button repeat day was pressed.
+    //this.checkRepeatedDay()
   },
   methods: {
     getAllActivities: function () {
@@ -141,12 +152,48 @@ export default {
           this.$emit("dayActivities", this.dayActivities)
         }
       }
+    },
+    checkRepeatedDay(){
+      if (this.previousDay){
+        var len = this.previousDay.length
+        this.positions = len
+        console.log(len)
+        this.hours.start.pop(0)
+        this.hours.end.pop(0)
+        for (var i = 0; i < len; i++){
+          this.prevActivity.push(this.previousDay[i].activity)
+          this.hours.start.push(this.previousDay[i].start)
+          this.hours.end.push(this.previousDay[i].end)
+          console.log(i)
+        }
+        console.log(this.prevActivity)
+        console.log(this.hours)
+        this.repeat = true; 
+        this.previousDay = "";
+      }
+      if(this.repeat){
+        console.log("repeate active")
+      }
+    },
+    generateRepeated(){
+      this.previousDay = [{activity: "Dormir", start: 0, end: 12},
+                          {activity: "Trabalhar", start: 12, end: 18},
+                          {activity: "Comer", start: 18, end: 20},
+                          {activity: "Dormir", start: 20, end: 24}]
+      console.log(this.previousDay)
+      this.checkRepeatedDay()
     }
   }
 }
 </script>
 
 <style scoped>
+
+.min-height{
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 .pr-6 {
   padding-right: 6rem;
 }
