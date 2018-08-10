@@ -1,30 +1,31 @@
 <template>
   <div class="container">
-    <h5>{{day}}</h5>
+    <h5>{{day}} <img v-if="allChecked" src="../assets/green-check.png" alt="ok" height="20px" /></h5>
 
     <div class="container">
       <div class="row mt-4 p-2 bg-secondary text-white border border-secondary rounded shadow-sm">
-        <div class="font-weight-bold col-md-8 pl-10">Atividade</div>
-        <div class="font-weight-bold col-md-1 pl-10">Inicio</div>
-        <div class="font-weight-bold col-md-1 pl-6">Fim</div>
+        <div class="header text">Atividade</div>
+        <div class="header number">Inicio</div>
+        <div class="header number">Fim</div>
+        <div class="header button">Remover</div>
       </div>
     </div>
 
     <div class="min-height">
 
-    <div class="row mt-1" :key="position" v-for="position in positions">
+    <div class="row mt-1" :key="position" v-for="position in activities.length">
       <div class="col-md-12">
 
         <!--SE HOUVER REPETIÇÃO, DEVO ENVIAR, TAMBÉM, TODAS AS ESCOLHAS DO DIA ANTERIOR. -->
-        <ActivityInput class="mt-1" v-if="repeat"
+        <ActivityInput class="mt-1 red"
         @activityInput="registerInput($event)"
         @changedEndHour="hoursManager(position, $event);"
-        :activities="activities"
-        :previousActivity="prevActivity[position-1]"
-        :start="hours.start[position-1]"
-        :end="hours.end[position-1]"
-        :position="position"
-        :isDisabled="position !== positions">
+        @activityRemoved="removeActivity(position-1)"
+        @verifyInputs="verifyInputs(position-1)"
+        :inputValues="activities[position-1]"
+        :previousActivity="activities[position-2]"
+        :nextActivity="activities[position]"
+        :activityList="activityList">
         </ActivityInput>
 
       </div>
@@ -35,14 +36,14 @@
     <div class="row mt-4 mb-5">
       <div class="col-md-5">
         <div class="input-group input-group-lg">
-          <button type="button" v-bind:disabled="hours.end[hours.end.length-1]==24" @click="addActivity()" class="btn btn-outline-primary mr-2">Adicionar atividade</button>
-          <button @click="generateRepeated()">Gerar dia repetido</button>
+          <button type="button" @click="addActivity()" class="btn btn-outline-primary mr-2">Adicionar atividade</button>
         </div>
       </div>
+      <button class="btn btn-outline-primary" @click="copyPreviousDay()">Repetir dia anterior</button>
+      <!--
       <button type="button" @click="removeActivity()" id="removeButton" class="btn btn-outline-danger">Remover última atividade</button>
+      -->
     </div>
-
-    <p v-if="alert" class="alert alert-warning">{{alert}}</p>
   </div>
 </template>
 
@@ -53,144 +54,225 @@ import { getAll as getActivities } from '../services/activity'
 
 export default {
   name: 'DaySchedule',
-  props: ['day'],
+  props:{
+    day:{
+      required: true,
+      type: String
+    },
+    activities:{
+      required: true,
+      type: Array
+    },
+    dayIndex:{
+      required: true,
+      type: Number
+    }
+    //['day'],//Make activities a list passed as prop
+    
+  }, 
+  
   components: {
     ActivityInput,
   },
   data: () => {
     return {
-      activities: [],
-      dayActivities: {},
-      prevActivity: [],
-      activitiesFromInputs: [],
-      hours: { start: [0], end: [1]},
-      positions: 1,
-      alert: "",
-      repeat: false,
-      previousDay:""
+      activityList: [],
+      allChecked: false
     }
   },
   mounted() {
-    this.getAllActivities()//Checks if the button repeat day was pressed.
-    //this.checkRepeatedDay()
+    this.getAllActivities()
+    // this.checkRepeatedDay()
   },
   methods: {
     getAllActivities: function () {
+      console.log("Carregando atividades")
       getActivities()
       .then(res => {
-        this.activities = res.data
+        this.activityList = res.data
       })
       .catch(err => {
         console.error('DaySchedule, getActivies() ', err)
       })
     },
-    hoursManager: function (position, endHour) {
-      if (!position && !endHour) {
-        const lastHour = _.last(this.hours.end)
-        this.hours.start.push(lastHour)
+    // hoursManager: function (position, endHour) {
+    //   if (!position && !endHour) {
+    //     const lastHour = _.last(this.hours.end)
+    //     this.hours.start.push(lastHour)
 
-        if(lastHour < 24) {
-          this.hours.end.push(lastHour + 1)
+    //     if(lastHour < 24) {
+    //       this.hours.end.push(lastHour + 1)
+    //     } else {
+    //       this.hours.end.push(24)
+    //     }
+
+    //     this.verifyHour()
+    //     return
+    //   }
+
+    //   this.hours.end[position-1] = endHour
+
+    //   for (let i = position + 1; i < this.hours.start.length; i++) {
+    //     if(this.hours.start[i]) {
+    //       this.hours.start[i] = this.hours.end[i-1]
+    //     }
+    //   }
+
+    //   let lastActivity = _.last(this.dayActivities[this.day])      
+    //   if (lastActivity && lastActivity.end && lastActivity.position === this.positions-1) {
+    //     lastActivity.end = _.last(this.hours.end)
+    //   }
+
+    //   this.$forceUpdate()
+    //   this.verifyHour()
+    // },
+    
+    addActivity(){
+      let lastActivityIndex = this.activities.length - 1
+          if(this.activities[lastActivityIndex].end >= 24){
+              alert("Não é possível adicionar atividades após as 24h, vá para o próximo dia")
+              return
+          }
+          let lastActivity=this.activities[lastActivityIndex]
+          let data = {
+            index: this.dayIndex,
+            newActivityStart: lastActivity.end,
+            newActivityEnd: Number(lastActivity.end) + 1,
+          }
+          console.log(lastActivity)
+          this.$emit("activityAdded", data)
+    },
+
+    removeActivity(index){
+      if(this.activities.length == 1){
+        alert("Os dias precisam ter pelo menos uma atividade!")
+        return        
+      }
+      let data = {
+        day: this.dayIndex,
+        position: index
+      }
+      console.log(data)
+      this.$emit("activityRemoved", data)
+      this.verifyInputs(index - 1)
+      // this.validateActivities()
+    },
+
+    copyPreviousDay(){
+      this.$emit("copyPreviousDay", this.dayIndex)
+      this.checkDayCompletition()
+    },
+
+    verifyInputs(index){
+      let currentActivity = this.activities[index]
+      let nextActivity = this.activities[index + 1]
+      let previousActivity = this.activities[index - 1]
+      //verify with previous
+      if(previousActivity){
+        if(currentActivity.start != previousActivity.end){
+          previousActivity.valid = false
         } else {
-          this.hours.end.push(24)
-        }
-
-        this.verifyHour()
-        return
-      }
-
-      this.hours.end[position-1] = endHour
-
-      for (let i = position + 1; i < this.hours.start.length; i++) {
-        if(this.hours.start[i]) {
-          this.hours.start[i] = this.hours.end[i-1]
+          previousActivity.valid = true
         }
       }
-
-      let lastActivity = _.last(this.dayActivities[this.day])      
-      if (lastActivity && lastActivity.end && lastActivity.position === this.positions-1) {
-        lastActivity.end = _.last(this.hours.end)
+      //verify with next
+      if(nextActivity){
+        if (currentActivity.end != nextActivity.start){
+          nextActivity.valid = false
+        } else {
+          nextActivity.valid = true
+        }
       }
+      console.log(nextActivity)
+      this.checkDayCompletition()
 
-      this.$forceUpdate()
-      this.verifyHour()
     },
-    addActivity: function () {
-      this.alert = null
-      // double negation to return a boolean
-      const hasActivityOnLastPosition = !!(this.dayActivities[this.day] && this.dayActivities[this.day][this.positions-1])
-      const hasHourOnLastPosition = !!this.hours.end[this.positions-1]
 
-      if (this.positions < 23 && hasHourOnLastPosition && hasActivityOnLastPosition) {
-        this.positions++
-        this.hoursManager()
+    checkDayCompletition(){
+      let lastActivityIndex = this.activities.length - 1
+      if (this.activities[0].start == 0 && this.activities[lastActivityIndex].end == 24){
+        for (let i = 0; i < lastActivityIndex; i++){
+          if (!this.activities[i].valid){
+            this.allChecked = false
+            this.$emit("invalidDay", this.dayIndex)
+            return
+          }
+        }
+        this.allChecked = true;
+        this.$emit("validDay", this.dayIndex)
       } else {
-        this.alert = "Por favor, preencha a última atividade."
+        this.allChecked = false;
+        this.$emit("invalidDay", this.dayIndex)
       }
 
-      this.verifyHour()
-    },
-    removeActivity: function () {
-      if(this.positions > 1) {
-        this.hours.start.pop()
-        this.hours.end.pop()
-        this.positions--
-      }
-    },
-    registerInput: function (event) {
-      event.position = this.positions - 1
-      this.activitiesFromInputs.push(event)
-      this.dayActivities[this.day] = this.activitiesFromInputs
-
-      this.verifyHour()
-    },
-    verifyHour: function () {
-      if(_.last(this.hours.end) === 24) {
-        this.$emit("totalDay", _.last(this.hours.end))
-
-        if (this.dayActivities[this.day] && this.dayActivities[this.day][this.positions-1]) {
-          this.$emit("dayActivities", this.dayActivities)
-        }
-      }
-    },
-    checkRepeatedDay(){
-      if (this.previousDay){
-        var len = this.previousDay.length
-        this.positions = len
-        console.log(len)
-        this.hours.start.pop(0)
-        this.hours.end.pop(0)
-        for (var i = 0; i < len; i++){
-          this.prevActivity.push(this.previousDay[i].activity)
-          this.hours.start.push(this.previousDay[i].start)
-          this.hours.end.push(this.previousDay[i].end)
-          console.log(i)
-        }
-        console.log(this.prevActivity)
-        console.log(this.hours)
-        this.repeat = true; 
-        this.previousDay = "";
-      }
-      if(this.repeat){
-        console.log("repeate active")
-      }
-    },
-    generateRepeated(){
-      this.previousDay = [{activity: "Dormir", start: 0, end: 12},
-                          {activity: "Trabalhar", start: 12, end: 18},
-                          {activity: "Comer", start: 18, end: 20},
-                          {activity: "Dormir", start: 20, end: 24}]
-      console.log(this.previousDay)
-      this.checkRepeatedDay()
     }
+    
+    // addActivity: function () {
+    //   this.alert = null
+    //   // double negation to return a boolean
+    //   const hasActivityOnLastPosition = !!(this.dayActivities[this.day] && this.dayActivities[this.day][this.positions-1])
+    //   const hasHourOnLastPosition = !!this.hours.end[this.positions-1]
+
+    //   if (this.positions < 23 && hasHourOnLastPosition && hasActivityOnLastPosition) {
+    //     this.positions++
+    //     this.hoursManager()
+    //   } else {
+    //     this.alert = "Por favor, preencha a última atividade."
+    //   }
+
+    //   this.verifyHour()
+    // },
+    // removeActivity: function () {
+    //   if(this.positions > 1) {
+    //     this.hours.start.pop()
+    //     this.hours.end.pop()
+    //     this.positions--
+    //   }
+    // },
+    // registerInput: function (event) {
+    //   event.position = this.positions - 1
+    //   this.activitiesFromInputs.push(event)
+    //   this.dayActivities[this.day] = this.activitiesFromInputs
+
+    //   this.verifyHour()
+    // },
+    // verifyHour: function () {
+    //   if(_.last(this.hours.end) === 24) {
+    //     this.$emit("totalDay", _.last(this.hours.end))
+
+    //     if (this.dayActivities[this.day] && this.dayActivities[this.day][this.positions-1]) {
+    //       this.$emit("dayActivities", this.dayActivities)
+    //     }
+    //   }
+    // },
   }
 }
 </script>
 
 <style scoped>
 
+.header{
+  font-size: 20px;
+  text-align: center;
+}
+
+.text{
+  width:750px;
+}
+
+.number{
+  margin-left: 10px;
+  width: 100px;
+}
+
+.button{
+  width: 80px;
+  text-align: right;
+
+}
+
 .min-height{
-  max-height: 300px;
+  height: 300px;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -206,7 +288,7 @@ export default {
 .pl-6 {
   padding-left: 6.5rem;
 }
-#removeButton{
+#remove-button{
   vertical-align:middle;
   margin-left: 425px;
 }
