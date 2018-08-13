@@ -66,6 +66,10 @@ export default {
     dayIndex:{
       required: true,
       type: Number
+    },
+    hasPreviousWeek:{
+      required: true,
+      type: Boolean
     }
     //['day'],//Make activities a list passed as prop
     
@@ -82,6 +86,11 @@ export default {
   },
   mounted() {
     this.getAllActivities()
+    console.log(this.activities)
+    if(this.hasPreviousWeek){
+      console.log("Há semana anterior")
+      this.allChecked = true
+    }
     // this.checkRepeatedDay()
   },
   methods: {
@@ -141,6 +150,7 @@ export default {
           }
           console.log(lastActivity)
           this.$emit("activityAdded", data)
+          this.verifyInputs(lastActivityIndex + 1)
     },
 
     removeActivity(index){
@@ -163,13 +173,30 @@ export default {
       this.checkDayCompletition()
     },
 
+    verifyAllInputs(){
+      console.log("Verificando agenda do usuário")
+      let length = this.activities.length
+      for(let i = 0; i < length; i++){
+        this.verifyInputs(i)
+      }
+
+    },
+
     verifyInputs(index){
       let currentActivity = this.activities[index]
       let nextActivity = this.activities[index + 1]
       let previousActivity = this.activities[index - 1]
+      console.log(currentActivity)
+      // 
+      if(currentActivity.id === 0){
+        console.log("Atividade deve estar preenchida")
+        //currentActivity.valid = false
+        return
+      }
       //verify with previous
       if(previousActivity){
         if(currentActivity.start != previousActivity.end){
+          console.log(currentActivity)
           previousActivity.valid = false
         } else {
           previousActivity.valid = true
@@ -272,7 +299,7 @@ export default {
 }
 
 .min-height{
-  height: 300px;
+  height: 250px;
   overflow-y: auto;
   overflow-x: hidden;
 }

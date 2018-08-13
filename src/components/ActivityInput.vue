@@ -101,6 +101,9 @@ export default {
   methods: {
     setActivity: function (activity) {
       this.inputValues.activity = activity.description
+      this.inputValues.id = activity.id
+      this.$emit("verifyInputs")
+      console.log(this.inputValues.id)
       this.changeValue()
     },
 

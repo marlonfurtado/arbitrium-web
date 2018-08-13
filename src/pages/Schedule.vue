@@ -19,13 +19,14 @@
 
     <!-- SCHEDULE -->
     <div class="row align-items-center mt-5 mb-1">
-      <carousel class="col pt-2 pb-2" @pageChange="pageChange" :per-page="1" :mouse-drag="true" :navigation-enabled="true">
+      <carousel class="col pt-2 pb-2" :per-page="1" :mouse-drag="true" :navigation-enabled="true">
 
         <slide class="carousel-wrapper" :key="day" v-for="day in days.length">
           <DaySchedule 
           :activities="activities[day-1]"
           :day="days[day-1]"
           :dayIndex="day-1"
+          :hasPreviousWeek="hasPreviousWeek"
           @activityAdded="addActivity($event)"
           @activityRemoved="removeActivity($event)"
           @copyPreviousDay="copyPreviousDay($event)"
@@ -35,7 +36,9 @@
       </carousel>
     </div>
 
+    <!--
     <button @click="atividades()">ver atividades</button>
+    -->
 
     <div v-if="validWeek" class="col-md-2 ml-27">
       <div class="input-group input-group-lg">
@@ -66,10 +69,7 @@ export default {
       days: ['Segunda-Feira','Terça-Feira','Quarta-Feira','Quinta-Feira','Sexta-Feira','Sábado','Domingo'],
       validDays: [false, false, false, false, false, false, false],
       validWeek: false,
-      activitiesByDay: [{
-        dayNumber: Number,
-        activities: new Array(24)
-      }],
+      activitiesByDay: new Array(7),
       interviewId: null,
       scheduleId: null,
       weekActivities:{
@@ -84,50 +84,66 @@ export default {
       alert: "",
       activities:[[{
                 activity: "Atividade",
+                id: 0,
                 start: 0,
                 end: 1,
                 valid: true
             }],[{
                 activity: "Atividade",
+                id: 0,
                 start: 0,
                 end: 1,
                 valid: true
             }],[{
                 activity: "Atividade",
+                id: 0,
                 start: 0,
                 end: 1,
                 valid: true
             }],
             [{
                 activity: "Atividade",
+                id: 0,
                 start: 0,
                 end: 1,
                 valid: true
             }],
             [{
                 activity: "Atividade",
+                id: 0,
                 start: 0,
                 end: 1,
                 valid: true
             }],
             [{
                 activity: "Atividade",
+                id: 0,
                 start: 0,
                 end: 1,
                 valid: true
             }],
             [{
                 activity: "Atividade",
+                id: 0,
                 start: 0,
                 end: 1,
                 valid: true
             }]
-            ]
+            ],
+
+      hasPreviousWeek: false,
     }
   },
   mounted() {
     this.getInterviewId()
     this.getScheduleId()
+    let lastWeekSchedule = JSON.parse(sessionStorage.getItem('previousWeek')) || ""
+    if(lastWeekSchedule){
+      this.activities = lastWeekSchedule
+      this.validDays = [true, true, true, true, true, true, true]
+      this.validWeek = true
+      this.hasPreviousWeek = true
+      }
   },
   methods: {
     getInterviewId: function () {
@@ -139,12 +155,16 @@ export default {
 
     addActivity(data){
       let index = data.index
-      if(!data.activity)          
+      if(!data.activity){
         data.activity = "Atividade"
+        data.newActivityId = 0
+      }          
+        
       this.activities[index].push({
         activity:data.activity,
         start: data.newActivityStart,
         end: data.newActivityEnd,
+        id: data.newActivityId,
         valid: true
       })
     },
@@ -212,46 +232,60 @@ export default {
     adaptAndCreateWeek(){
       //adapts the activities Array to a 24/7 Array, then creates week in DB
       for (let i = 0; i < 7; i++){
-        this.activitiesByDay
+        this.activitiesByDay[i]={
+          day_number: i+1,
+          hours: new Array(24)
+        }
+        //console.log(this.activitiesByDay)
         this.setDayActivities(i)
+        console.log(this.activitiesByDay)
+        debugger
       }
-      console.log(this.activitiesByDay)
+      console.log("FIm")
+      //console.log(this.activitiesByDay)
       this.relationship = {
         "schedule_id": this.scheduleId,
-        "week_number": weekNumber,
+        "week_number": this.week,
         "days": this.activitiesByDay
       }
+      sessionStorage.setItem('previousWeek',JSON.stringify(this.activities))
+      //console.log(this.relationship)
+      this.createWeek()
     },
 
     setDayActivities(dayIndex){
       //make 24h array
+      console.log(this.activitiesByDay)
       for(let i = 0; i < 24; i++){
-        //console.log(this.activitiesByDay)
+        console.log(this.activitiesByDay)
         let newActivity = this.returnActivityByHour(i, dayIndex)
         console.log(newActivity)
-        this.activitiesByDay[dayIndex][i] = newActivity
-        //mudar para
-        //this.activitiesByDay[dayIndex].activities[i].hourNumber = i
-        //this.activitiesByDay[dayIndex]activities[i].activityId = newActivity
+        this.activitiesByDay[dayIndex].hours[i] = newActivity
       }
-
+      console.log(this.activitiesByDay)
     },
 
-      returnActivityByHour(activityHour, dayIndex){
-        let currentDayActivities = this.activities[dayIndex]
-        let dayLength = currentDayActivities.length
-        for(let i = 0; i < dayLength; i++){
-          let activity = currentDayActivities[i]
-          if(activity.start <= activityHour && activity.end > activityHour){
-            console.log("i = " + i)
-            console.log("avitidade retornada para dia " + dayIndex + ", hora " + activityHour + ": " + activity.activity  )
-            debugger
-            return activity.activity
+    returnActivityByHour(activityHour, dayIndex){
+      let currentDayActivities = this.activities[dayIndex]
+      let dayLength = currentDayActivities.length
+      for(let i = 0; i < dayLength; i++){
+        let activity = currentDayActivities[i]          
+        if(activity.start <= activityHour && activity.end > activityHour){
+          console.log(activity)
+          console.log("i = " + i)
+          console.log("avitidade retornada para dia " + dayIndex + ", hora " + activityHour + ": " + activity.activity  )
+          console.log("Id da atividade: " + activity.id)
+          return {
+            activity_id: activity.id,              
+            hour_number: activityHour
           }
         }
-        return "null"
-
-      },
+      }
+      return {
+        activity_id: "null",
+        hour_number: "null"
+      }
+    },
 
     createWeek: function () {
       this.alert = null
@@ -278,23 +312,23 @@ export default {
         this.isSunday = false;
       }  
     },
-    setCountHoursInDays: function(total,day){
-      this.countHoursInDay[day] = total
-    },
-    verifyHour: function(){
-      const values = _.values(this.countHoursInDay)
-      if(values.length === 7){
-        for(let i = 0 ; i < values.length; i++){
-          if(values[i] !== 24){ 
-            return this.canStart = false
-          }
-        }
-       this.canStart = true
-      }
-      else{
-        this.canStart = false
-      }
-    },
+    // setCountHoursInDays: function(total,day){
+    //   this.countHoursInDay[day] = total
+    // },
+    // verifyHour: function(){
+    //   const values = _.values(this.countHoursInDay)
+    //   if(values.length === 7){
+    //     for(let i = 0 ; i < values.length; i++){
+    //       if(values[i] !== 24){ 
+    //         return this.canStart = false
+    //       }
+    //     }
+    //    this.canStart = true
+    //   }
+    //   else{
+    //     this.canStart = false
+    //   }
+    // },
 
     copyPreviousDay(dayIndex){
       console.log(dayIndex)
@@ -313,6 +347,7 @@ export default {
                     activity: this.activities[previousDayIndex][i].activity,
                     newActivityStart: this.activities[previousDayIndex][i].start,
                     newActivityEnd: this.activities[previousDayIndex][i].end,
+                    newActivityId: this.activities[previousDayIndex][i].id,
                     index: currentDayIndex
                 }    
                 this.addActivity(activityToAdd)
@@ -340,6 +375,10 @@ export default {
     this.validWeek = true
 
     },
+
+    atividades(){
+      console.log(this.activities)
+    }
   }
 }
 </script>
