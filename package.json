@@ -9,7 +9,15 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "bootstrap": "^4.1.0",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.3",
+    "save": "^2.3.2",
+    "underscore": "^1.9.0",
+    "vee-validate": "^2.0.9",
     "vue": "^2.5.2",
+    "vue-carousel": "^0.7.3",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
